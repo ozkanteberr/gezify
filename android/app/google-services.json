@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "594086955691",
+    "project_id": "gezify-f8e1e",
+    "storage_bucket": "gezify-f8e1e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:594086955691:android:112f4f67c0816b34c885ee",
+        "android_client_info": {
+          "package_name": "com.example.gezify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmW_Pw-f_z6v2o_wo13Nmmytbr50VjA7w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
