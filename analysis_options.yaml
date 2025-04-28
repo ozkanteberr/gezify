@@ -11,6 +11,7 @@ analyzer:
   errors:
     override_on_non_overriding_member: ignore
     must_be_immutable: ignore
+    unused_import: ignore ignore
 include: package:flutter_lints/flutter.yaml
 
 linter:

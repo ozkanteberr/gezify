@@ -8,11 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpPage extends StatelessWidget {
   SignUpPage({super.key});
-  final _formKey = GlobalKey<FormState>();
   late String email,password;
   final firebaseAuth = FirebaseAuth.instance;
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +17,6 @@ class SignUpPage extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: BasicAppBar(),
       body: Center(
-        child: Form(
-        key: _formKey,
-        
         child: Column(
           children: [
             SizedBox(height: 50,),
@@ -45,34 +39,12 @@ class SignUpPage extends StatelessWidget {
             SizedBox(height: 10,),
             CustomTextField(hintext: "E-mail",
              iconData: Icon(Icons.mail),
-             controller: emailController,
-             validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Lütfen e-posta adresinizi girin';
-                  }
-                  if (!value.contains('@')) {
-                    return 'Geçerli bir e-posta adresi girin';
-                  }
-                  return null;
-                },
+             
              ),
              SizedBox(height: 10,),
             CustomTextField(hintext: "Şifre",
              iconData: Icon(Icons.lock),
              obsecureText: true,
-             controller: passwordController,
-             validator: (value) {
-                  if (value !.isEmpty) {
-                    return 'Bilgileri eksiksiz doldurunuz';
-                  }
-                  if (value.length < 8 || value.length >8) {
-                      return "Şifre 8 karakter olmalıdır!";
-                    }
-                  else{}
-                  onSaved: (value){
-                    password=value;
-                  };
-                },
              ),
              SizedBox(height: 10,),
              Padding(
@@ -89,43 +61,6 @@ class SignUpPage extends StatelessWidget {
               height: 50,
               child: ElevatedButton(
                 onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        try {
-                          UserCredential userCredential = await firebaseAuth
-                              .createUserWithEmailAndPassword(
-                                  email: emailController.text.trim(),
-                                  password: passwordController.text.trim());
-                          if (userCredential.user != null) {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SignInPage()),
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Kayıt Başarılı! Giriş yapabilirsiniz.'),
-                                backgroundColor: Colors.green,
-                              ),
-                            );
-                          }
-                        } on FirebaseAuthException catch (e) {
-                          String errorMessage = 'Kayıt sırasında bir hata oluştu.';
-                          if (e.code == 'weak-password') {
-                            errorMessage = 'Şifre çok zayıf.';
-                          } else if (e.code == 'email-already-in-use') {
-                            errorMessage = 'Bu e-posta adresi zaten kullanımda.';
-                          } else if (e.code == 'invalid-email') {
-                            errorMessage = 'Geçersiz e-posta adresi.';
-                          }
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(errorMessage),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        }
-                      }
                     },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
@@ -179,12 +114,8 @@ class SignUpPage extends StatelessWidget {
                  icon: Icon(Icons.alternate_email,color: Colors.lightBlue,size:30))
                ],
             )
-
-              
-
           ],
         ),
-      ),
     )
     );
   }

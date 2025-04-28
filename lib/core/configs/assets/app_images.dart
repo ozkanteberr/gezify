@@ -3,4 +3,5 @@ class AppImages {
 
   static const String appLogo = '${base}app_logo.png';
   static const String appTitle = '${base}app_title_rm.png';
+  static const String images1 = '${base}trabzon.jpg';
 }
