@@ -11,10 +11,8 @@ class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       title: title ?? Text(''),
       centerTitle: true,
-      leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
+      leading: IconButton
+          onPressed: () {},
           icon: Container(
             width: 50,
             height: 50,
