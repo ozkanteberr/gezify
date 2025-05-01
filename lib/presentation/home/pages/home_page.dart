@@ -1,8 +1,5 @@
-// ignore_for_file: unused_import
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gezify/common/widgets/app_bar.dart';
 import 'package:gezify/common/widgets/destination_card.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
 
@@ -33,7 +30,7 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Üst kısım: Profil ve Bildirim
+    
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -63,7 +60,7 @@ class HomePage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-              // "Explore the Beautiful world!" yazısı
+    
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
