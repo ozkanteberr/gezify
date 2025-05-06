@@ -30,7 +30,6 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-    
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -38,7 +37,6 @@ class HomePage extends StatelessWidget {
                     children: [
                       const CircleAvatar(
                         radius: 25,
-                        // backgroundImage: NetworkImage('https://via.placeholder.com/150'),
                       ),
                       const SizedBox(width: 8),
                       Text(
@@ -60,7 +58,6 @@ class HomePage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-    
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
