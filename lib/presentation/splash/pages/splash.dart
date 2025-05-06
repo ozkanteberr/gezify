@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gezify/core/configs/assets/app_images.dart';
-import 'package:gezify/presentation/auth/pages/sign_up.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -25,10 +24,5 @@ class _SplashPageState extends State<SplashPage> {
 
   Future<void> redirect() async {
     await Future.delayed(Duration(seconds: 2));
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SignUpPage(),
-        ));
   }
 }
