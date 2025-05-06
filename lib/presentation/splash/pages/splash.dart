@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gezify/core/configs/assets/app_images.dart';
-import 'package:gezify/presentation/auth/presentation/pages/sign_up.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
