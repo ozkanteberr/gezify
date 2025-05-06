@@ -98,7 +98,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text("Şifre en az 6 karakter içermelidir",
+                      Text("Şifre en az 6 karakter içermelidir.",
                           style: Theme.of(context)
                               .textTheme
                               .labelSmall!
