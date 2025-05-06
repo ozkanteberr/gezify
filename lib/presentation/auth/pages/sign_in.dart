@@ -1,5 +1,3 @@
-// ignore_for_file: override_on_non_overriding_member, unused_local_variable, unused_label, must_be_immutable, body_might_complete_normally_nullable, unused_import
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gezify/common/widgets/app_bar.dart';

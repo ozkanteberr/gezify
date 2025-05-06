@@ -1,7 +1,10 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gezify/common/widgets/destination_card.dart';
-import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
+import 'package:gezify/common/widgets/app_bar.dart';
+import 'package:gezify/presentation/home/pages/widgets/destination_card.dart';
+import 'package:gezify/presentation/home/pages/widgets/category_selector.dart';
+import 'package:gezify/presentation/home/pages/widgets/category_item.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -30,6 +33,7 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Üst kısım: Profil ve Bildirim
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -37,6 +41,8 @@ class HomePage extends StatelessWidget {
                     children: [
                       const CircleAvatar(
                         radius: 25,
+                        // backgroundImage:
+                        // NetworkImage('https://via.placeholder.com/150'),
                       ),
                       const SizedBox(width: 8),
                       Text(
@@ -51,26 +57,26 @@ class HomePage extends StatelessWidget {
                   ),
                   IconButton(
                     icon: const Icon(Icons.notifications_none),
-                    onPressed: () {
-                      context.read<AuthCubit>().logout();
-                    },
+                    onPressed: () {},
                   ),
                 ],
               ),
               const SizedBox(height: 20),
+
+              // Başlık yazısı
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Explore the',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 28,
                       color: Colors.black,
                     ),
                   ),
                   RichText(
-                    text: TextSpan(
+                    text: const TextSpan(
                       style: TextStyle(fontSize: 28),
                       children: [
                         TextSpan(
@@ -92,16 +98,52 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
+              const SizedBox(height: 24),
+
+              // Arama kutusu
+              TextField(
+                style: const TextStyle(color: Colors.black87),
+                decoration: InputDecoration(
+                  hintText: 'Search something...',
+                  prefixIcon: const Icon(Icons.search),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Kategori seçici
+              CategorySelector(
+                categories: [
+                  CategoryItem(label: "Tarihi Yerler", iconPath: ""),
+                  CategoryItem(label: "Müzeler", iconPath: ""),
+                  CategoryItem(label: "Deniz / Sahil", iconPath: ""),
+                  CategoryItem(label: "Doğa / Orman", iconPath: ""),
+                  CategoryItem(label: " Yerel Lezzetler / Restoranlar", iconPath: ""),
+                  CategoryItem(label: "Dini Mekanlar", iconPath: ""),
+                ],
+                onSelected: (index) => print("Selected index: $index"),
+                selectedColor: Colors.blue,
+                itemRadius: 25,
+              ),
               const SizedBox(height: 40),
+
+              // Best Destination başlık
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
                     'Best Destination',
                     style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black),
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                    ),
                   ),
                   TextButton(
                     onPressed: () {},
@@ -109,26 +151,35 @@ class HomePage extends StatelessWidget {
                   )
                 ],
               ),
-              const SizedBox(height: 40),
-              SizedBox(
-                height: 250,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    DestinationCard(
-                      imageUrl: 'assets/images/trabzon.jpg',
-                      title: 'Niladri Reservoir',
-                      location: 'Trabzon, Türkiye',
-                      rating: 4.7,
-                    ),
-                    const DestinationCard(
-                      imageUrl: 'assets/images/trabzon.jpg',
-                      title: 'Darma Valley',
-                      location: 'Darma, India',
-                      rating: 4.8,
-                    ),
-                  ],
-                ),
+              const SizedBox(height: 16),
+
+              // Aşağı kaydırmalı destinasyonlar
+              Column(
+                children: [
+                  DestinationCard(
+                    imageUrl: 'assets/images/app_logo.png',
+                    title: 'Hirosima Place Tokyo',
+                    location: 'Tokyo, Japan',
+                    rating: 4.8,
+                    onTap: () {
+                      // Tıklandığında yapılacak işlem
+                    },
+                  ),
+                  DestinationCard(
+                    imageUrl: 'assets/images/trabzon.jpg',
+                    title: 'Seoul Garden',
+                    location: 'South Korea',
+                    rating: 4.6,
+                    onTap: () {},
+                  ),
+                  DestinationCard(
+                    imageUrl: 'assets/images/uzungöl.jpg',
+                    title: 'Golden Temple',
+                    location: 'India',
+                    rating: 4.9,
+                    onTap: () {},
+                  ),
+                ],
               )
             ],
           ),
