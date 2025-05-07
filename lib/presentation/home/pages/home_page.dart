@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:gezify/common/widgets/app_bar.dart';
+import 'package:gezify/presentation/calender/calender_page.dart';
+import 'package:gezify/presentation/create_route/route_page.dart';
+import 'package:gezify/presentation/create_route/route_directed.dart';
 import 'package:gezify/presentation/home/pages/widgets/destination_card.dart';
 import 'package:gezify/presentation/home/pages/widgets/category_selector.dart';
 import 'package:gezify/presentation/home/pages/widgets/category_item.dart';
@@ -14,17 +17,30 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        onTap: (index){
+          if (index == 1){
+            Navigator.push(
+             context,
+             MaterialPageRoute(builder: (context) => const CalendarPage()),
+              );
+          }
+          else if (index == 2) {
+           Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => RouteDirected()), 
+           );
+         }
+        },
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Ana Sayfa'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today), label: 'Takvim'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Takvim'),
+          BottomNavigationBarItem(icon: Icon(Icons.mode_of_travel), label: 'Rota Oluştur'),
           BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Mesajlar'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],
-        currentIndex: 0,
         type: BottomNavigationBarType.fixed,
       ),
       body: SafeArea(
@@ -188,3 +204,5 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
+
