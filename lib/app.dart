@@ -4,7 +4,7 @@ import 'package:gezify/presentation/auth/data/firebase_auth_repo.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_states.dart';
 import 'package:gezify/presentation/auth/presentation/pages/auth_page.dart';
-import 'package:gezify/presentation/home/pages/home_page.dart';
+import 'package:gezify/presentation/home/presentation/pages/home_page.dart';
 
 class MyApp extends StatelessWidget {
   final authRepo = FirebaseAuthRepo();

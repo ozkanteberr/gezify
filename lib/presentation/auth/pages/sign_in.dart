@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gezify/common/widgets/app_bar.dart';
 import 'package:gezify/common/widgets/custom_text_field.dart';
 import 'package:gezify/presentation/auth/pages/sign_up.dart';
-import 'package:gezify/presentation/home/pages/home_page.dart';
+import 'package:gezify/presentation/home/presentation/pages/home_page.dart';
 
 class SignInPage extends StatelessWidget {
   SignInPage({super.key});
