@@ -41,7 +41,7 @@ class RouteDirected extends StatelessWidget {
             _buildFeatureButton(
               context: context,
               icon: Icons.list_alt,
-              title: "İste Rotalarımı Gör",
+              title: "Kaydedilen Rotalar",
               color: Colors.purple,
               onTap: () => print("İste Rotalarım"),
             ),

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gezify/presentation/auth/domain/entities/app_user.dart';
 import 'package:gezify/presentation/auth/domain/repos/auth_repo.dart';
 
+
 class FirebaseAuthRepo implements AuthRepo {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
@@ -14,6 +15,19 @@ class FirebaseAuthRepo implements AuthRepo {
 
     if (firebaseUser == null) {
       return null;
+    }
+
+    // Get user data from Firestore
+    final userDoc =
+        await firebaseFirestore.collection("users").doc(firebaseUser.uid).get();
+
+    if (userDoc.exists) {
+      final userData = userDoc.data() as Map<String, dynamic>;
+      return AppUser(
+        uid: firebaseUser.uid,
+        email: firebaseUser.email!,
+        name: userData['name'] ?? '',
+      );
     }
 
     return AppUser(uid: firebaseUser.uid, email: firebaseUser.email!, name: '');
@@ -58,5 +72,13 @@ class FirebaseAuthRepo implements AuthRepo {
     } catch (e) {
       throw Exception("Kayıt yapılamadı! Hata:$e");
     }
+  }
+
+  User? getFirebaseUser() {
+    return firebaseAuth.currentUser;
+  }
+
+  Stream<User?> get currentUserStream {
+    return firebaseAuth.authStateChanges();
   }
 }
