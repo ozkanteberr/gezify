@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:gezify/presentation/auth/presentation/pages/sign_in.dart';
 
 class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? title;
-  const BasicAppBar({super.key, this.title});
+  final void Function()? onPressed;
+  const BasicAppBar({super.key, this.title, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +14,13 @@ class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: title ?? Text(''),
       centerTitle: true,
       leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SignInPage(),
+                ));
+          },
           icon: Container(
             width: 50,
             height: 50,

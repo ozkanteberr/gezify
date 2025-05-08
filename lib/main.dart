@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gezify/presentation/auth/data/firebase_auth_repo.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
+import 'package:gezify/presentation/auth/presentation/cubits/auth_states.dart';
+import 'package:gezify/presentation/auth/presentation/pages/auth_page.dart';
 import 'package:gezify/presentation/home/presentation/cubits/navigation_cubit.dart';
 import 'package:gezify/presentation/home/presentation/pages/home_page.dart';
 
@@ -22,16 +24,34 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthCubit(authRepo: authRepo)),
+        BlocProvider(
+            create: (context) => AuthCubit(authRepo: authRepo)..checkUser()),
         BlocProvider(create: (context) => NavigationCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Gezify',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
+        home: BlocConsumer<AuthCubit, AuthStates>(
+          builder: (context, authState) {
+            if (authState is Unauthenticated) {
+              return AuthPage();
+            }
+            if (authState is Authanticated) {
+              return HomePage();
+            } else {
+              return Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+          },
+          listener: (context, state) {
+            if (state is AuthError) {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(state.message)));
+            }
+          },
         ),
-        home: const HomePage(),
       ),
     );
   }

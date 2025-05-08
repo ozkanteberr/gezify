@@ -7,6 +7,8 @@ import 'package:gezify/common/widgets/app_bar.dart';
 import 'package:gezify/presentation/auth/domain/entities/app_user.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_states.dart';
+import 'package:gezify/presentation/auth/presentation/pages/sign_in.dart';
+import 'package:gezify/presentation/auth/presentation/pages/sign_up.dart';
 import 'package:gezify/presentation/home/presentation/cubits/navigation_cubit.dart';
 import 'package:gezify/presentation/home/presentation/pages/calendar_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/messages_page.dart';
@@ -17,7 +19,8 @@ import 'package:gezify/presentation/home/presentation/pages/widgets/category_sel
 import 'package:gezify/presentation/home/presentation/pages/widgets/category_item.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final void Function()? togglePage;
+  const HomePage({super.key, this.togglePage});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -83,15 +86,20 @@ class _HomePageState extends State<HomePage> {
                                 ),
                           );
                         }
-                        return const Text("Hoşgeldin, Misafir");
+                        return const Text("Hoşgeldin!");
                       },
                     ),
                   ],
                 ),
                 IconButton(
                   icon: const Icon(Icons.notifications_none),
-                  onPressed: () {
-                    context.read<AuthCubit>().logout();
+                  onPressed: () async {
+                    await context.read<AuthCubit>().logout();
+                    if (mounted) {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => SignInPage(),
+                      ));
+                    }
                   },
                 ),
               ],
