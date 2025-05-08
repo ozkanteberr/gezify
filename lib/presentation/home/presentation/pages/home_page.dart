@@ -9,11 +9,11 @@ import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_states.dart';
 import 'package:gezify/presentation/auth/presentation/pages/sign_in.dart';
 import 'package:gezify/presentation/auth/presentation/pages/sign_up.dart';
+import 'package:gezify/presentation/calender/calender_page.dart';
+import 'package:gezify/presentation/create_route/route_directed.dart';
 import 'package:gezify/presentation/home/presentation/cubits/navigation_cubit.dart';
-import 'package:gezify/presentation/home/presentation/pages/calendar_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/messages_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/profile_page.dart';
-import 'package:gezify/presentation/home/presentation/pages/search_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/destination_card.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/category_selector.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/category_item.dart';
@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
       case 1:
         return const CalendarPage();
       case 2:
-        return const SearchPage();
+        return const RouteDirected();
       case 3:
         return const MessagesPage();
       case 4:
