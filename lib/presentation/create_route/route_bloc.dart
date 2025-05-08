@@ -7,15 +7,13 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
 
   RouteBloc() : super(RouteState([])) {
     on<AddRoute>((event, emit) {
-      final newRoutes = List<String>.from(state.routes)
-        ..add('Rota $_counter');
+      final newRoutes = List<String>.from(state.routes)..add('Rota $_counter');
       _counter++;
       emit(RouteState(newRoutes));
     });
 
     on<RemoveRoute>((event, emit) {
-      final newRoutes = List<String>.from(state.routes)
-        ..removeAt(event.index);
+      final newRoutes = List<String>.from(state.routes)..removeAt(event.index);
       emit(RouteState(newRoutes));
     });
 
