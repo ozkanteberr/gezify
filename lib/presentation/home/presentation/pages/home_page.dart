@@ -7,11 +7,11 @@ import 'package:gezify/common/widgets/app_bar.dart';
 import 'package:gezify/presentation/auth/domain/entities/app_user.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_states.dart';
+import 'package:gezify/presentation/calender/calender_page.dart';
+import 'package:gezify/presentation/create_route/route_directed.dart';
 import 'package:gezify/presentation/home/presentation/cubits/navigation_cubit.dart';
-import 'package:gezify/presentation/home/presentation/pages/calendar_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/messages_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/profile_page.dart';
-import 'package:gezify/presentation/home/presentation/pages/search_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/destination_card.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/category_selector.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/category_item.dart';
@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
       case 1:
         return const CalendarPage();
       case 2:
-        return const SearchPage();
+        return const RouteDirected();
       case 3:
         return const MessagesPage();
       case 4:
@@ -236,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                   icon: Icon(Icons.home), label: 'Ana Sayfa'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.calendar_today), label: 'Takvim'),
-              BottomNavigationBarItem(icon: Icon(Icons.search), label: ''),
+              BottomNavigationBarItem(icon: Icon(Icons.mode_of_travel_outlined), label: 'Rota'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.message), label: 'Mesajlar'),
               BottomNavigationBarItem(
