@@ -4,7 +4,6 @@ import 'package:gezify/presentation/create_route/route_bloc.dart';
 import 'package:gezify/presentation/create_route/route_event.dart';
 import 'package:gezify/presentation/create_route/route_state.dart';
 
-
 class RoutePage extends StatelessWidget {
   const RoutePage({super.key});
 
@@ -20,7 +19,8 @@ class RoutePage extends StatelessWidget {
 class RouteView extends StatelessWidget {
   const RouteView({super.key});
 
-  void _editRouteNameDialog(BuildContext context, int index, String currentName) {
+  void _editRouteNameDialog(
+      BuildContext context, int index, String currentName) {
     final controller = TextEditingController(text: currentName);
     showDialog(
       context: context,
@@ -84,25 +84,29 @@ class RouteView extends StatelessWidget {
                         elevation: 2,
                         margin: const EdgeInsets.symmetric(vertical: 8),
                         child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 16),
                           //leading: const Icon(Icons.drag_handle, color: Colors.grey),
                           title: Text(state.routes[index]),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.edit, color: Colors.orange),
+                                icon: const Icon(Icons.edit,
+                                    color: Colors.orange),
                                 onPressed: () => _editRouteNameDialog(
                                     context, index, state.routes[index]),
                               ),
                               const SizedBox(width: 5),
-
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5.0),
                                 child: IconButton(
-                                  icon: const Icon(Icons.delete, color: Colors.red),
-                                  onPressed: () =>
-                                      context.read<RouteBloc>().add(RemoveRoute(index)),
+                                  icon: const Icon(Icons.delete,
+                                      color: Colors.red),
+                                  onPressed: () => context
+                                      .read<RouteBloc>()
+                                      .add(RemoveRoute(index)),
                                 ),
                               ),
                               const SizedBox(width: 16),

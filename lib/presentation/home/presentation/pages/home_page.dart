@@ -244,7 +244,8 @@ class _HomePageState extends State<HomePage> {
                   icon: Icon(Icons.home), label: 'Ana Sayfa'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.calendar_today), label: 'Takvim'),
-              BottomNavigationBarItem(icon: Icon(Icons.search), label: ''),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.mode_of_travel), label: 'Rota '),
               BottomNavigationBarItem(
                   icon: Icon(Icons.message), label: 'Mesajlar'),
               BottomNavigationBarItem(
