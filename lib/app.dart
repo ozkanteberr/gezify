@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
             }
             if (authState is Authanticated) {
               return HomePage();
-            } else {
+            } else { 
               return Scaffold(
                 body: Center(
                   child: CircularProgressIndicator(),

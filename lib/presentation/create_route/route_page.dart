@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gezify/presentation/create_route/route_bloc.dart';
 import 'package:gezify/presentation/create_route/route_event.dart';
 import 'package:gezify/presentation/create_route/route_state.dart';
-
+import 'package:gezify/presentation/create_route/route_detail.dart';
 
 class RoutePage extends StatelessWidget {
   const RoutePage({super.key});
@@ -85,8 +85,17 @@ class RouteView extends StatelessWidget {
                         margin: const EdgeInsets.symmetric(vertical: 8),
                         child: ListTile(
                           contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                          //leading: const Icon(Icons.drag_handle, color: Colors.grey),
                           title: Text(state.routes[index]),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RouteDetailPage(
+                                  routeName: state.routes[index],
+                                ),
+                              ),
+                            );
+                          },
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -96,7 +105,6 @@ class RouteView extends StatelessWidget {
                                     context, index, state.routes[index]),
                               ),
                               const SizedBox(width: 5),
-
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 5.0),
                                 child: IconButton(

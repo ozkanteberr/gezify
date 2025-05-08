@@ -15,7 +15,7 @@ class EditRoute extends RouteEvent {
 
 class ReorderRoute extends RouteEvent {
   final int oldIndex;
-  final int newIndex;
+  late final int newIndex;
   ReorderRoute(this.oldIndex, this.newIndex);
 }
 
