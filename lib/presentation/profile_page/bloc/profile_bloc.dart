@@ -13,10 +13,5 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       // Burada loglama veya yönlendirme işlemleri yapılabilir
       print("Tapped option: ${event.option}");
     });
-
-    on<Logout>((event, emit) {
-      // Burada çıkış işlemleri yapılacak
-      print("Logging out...");
-    });
   }
 }

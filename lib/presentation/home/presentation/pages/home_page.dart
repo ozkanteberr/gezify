@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gezify/common/widgets/app_bar.dart';
@@ -12,7 +13,7 @@ import 'package:gezify/presentation/auth/presentation/pages/sign_up.dart';
 import 'package:gezify/presentation/calender/calender_page.dart';
 import 'package:gezify/presentation/create_route/route_directed.dart';
 import 'package:gezify/presentation/home/presentation/cubits/navigation_cubit.dart';
-import 'package:gezify/presentation/home/presentation/pages/messages_page.dart';
+import 'package:gezify/presentation/tools_page/tools_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/destination_card.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/category_selector.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/category_item.dart';
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
       case 2:
         return const RouteDirected();
       case 3:
-        return const MessagesPage();
+        return const ToolsPage();
       case 4:
         return const ProfilePage();
       default:
@@ -92,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 IconButton(
-                  icon: const Icon(Icons.notifications_none),
+                  icon: const Icon(CupertinoIcons.bell),
                   onPressed: () async {
                     await context.read<AuthCubit>().logout();
                     if (mounted) {
@@ -110,9 +111,9 @@ class _HomePageState extends State<HomePage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Explore the',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 28,
                     color: Colors.black,
@@ -148,7 +149,7 @@ class _HomePageState extends State<HomePage> {
               style: const TextStyle(color: Colors.black87),
               decoration: InputDecoration(
                 hintText: 'Search something...',
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: const Icon(CupertinoIcons.search),
                 contentPadding: const EdgeInsets.symmetric(vertical: 16),
                 filled: true,
                 fillColor: Colors.grey[200],
@@ -162,19 +163,19 @@ class _HomePageState extends State<HomePage> {
 
             // Kategori seçici
             CategorySelector(
-              categories: [
-                CategoryItem(label: "Tarihi Yerler", iconPath: ""),
-                CategoryItem(label: "Müzeler", iconPath: ""),
-                CategoryItem(label: "Deniz / Sahil", iconPath: ""),
-                CategoryItem(label: "Doğa / Orman", iconPath: ""),
-                CategoryItem(
-                    label: " Yerel Lezzetler / Restoranlar", iconPath: ""),
-                CategoryItem(label: "Dini Mekanlar", iconPath: ""),
-              ],
-              selectedColor: Colors.blue,
-              itemRadius: 25,
-            ),
-            const SizedBox(height: 40),
+  categories: [
+    CategoryItem(label: "Tarihi Yerler", icon: CupertinoIcons.time),
+    CategoryItem(label: "Müzeler", icon: CupertinoIcons.book),
+    CategoryItem(label: "Deniz / Sahil", icon: CupertinoIcons.brightness),
+    CategoryItem(label: "Doğa / Orman", icon: CupertinoIcons.leaf_arrow_circlepath),
+    CategoryItem(label: "Yerel Lezzetler / Restoranlar", icon: CupertinoIcons.square_arrow_up_on_square),
+    CategoryItem(label: "Dini Mekanlar", icon: CupertinoIcons.moon),
+  ],
+  selectedColor: Colors.blue,
+  unselectedColor: Colors.grey,
+  itemRadius: 25,
+),
+const SizedBox(height: 40),
 
             // Best Destination başlık
             Row(
@@ -204,9 +205,7 @@ class _HomePageState extends State<HomePage> {
                   title: 'Hirosima Place Tokyo',
                   location: 'Tokyo, Japan',
                   rating: 4.8,
-                  onTap: () {
-                    // Tıklandığında yapılacak işlem
-                  },
+                  onTap: () {},
                 ),
                 DestinationCard(
                   imageUrl: 'assets/images/trabzon.jpg',
@@ -241,15 +240,15 @@ class _HomePageState extends State<HomePage> {
             unselectedItemColor: Colors.grey,
             items: const [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.home), label: 'Ana Sayfa'),
+                  icon: Icon(CupertinoIcons.home), label: 'Ana Sayfa'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.calendar_today), label: 'Takvim'),
+                  icon: Icon(CupertinoIcons.calendar), label: 'Takvim'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.mode_of_travel), label: 'Rota '),
+                  icon: Icon(CupertinoIcons.map), label: 'Rota'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.message), label: 'Mesajlar'),
+                  icon: Icon(CupertinoIcons.square_stack), label: 'Araçlar'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.person), label: 'Profil'),
+                  icon: Icon(CupertinoIcons.person), label: 'Profil'),
             ],
             currentIndex: state.index,
             type: BottomNavigationBarType.fixed,
@@ -267,3 +266,5 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+
