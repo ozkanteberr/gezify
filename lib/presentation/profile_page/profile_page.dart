@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
+import 'package:gezify/presentation/auth/presentation/pages/sign_in.dart';
 import 'package:gezify/presentation/profile_page/FAQ.dart';
 import 'package:gezify/presentation/profile_page/personal_details_page.dart';
+import 'package:gezify/presentation/profile_page/bloc/profile_bloc.dart';
+import 'package:gezify/presentation/profile_page/bloc/profile_event.dart';
+import 'package:gezify/presentation/profile_page/bloc/profile_state.dart';
 import 'package:gezify/presentation/profile_page/settings_dart';
-import 'profile_bloc.dart';
-import 'profile_event.dart';
-import 'profile_state.dart';
+
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -65,14 +68,17 @@ class ProfilePage extends StatelessWidget {
       case "Profil":
         icon = Icons.people;
         break;
-      case "Payment":
-        icon = Icons.payment;
+      case "Seyahat Geçmişi":
+        icon = Icons.where_to_vote_rounded;
         break;
       case "Settings":
         icon = Icons.settings;
         break;
       case "FAQ":
         icon = Icons.help_outline;
+        break;
+      case "Çıkış Yap":
+        icon = Icons.logout;
         break;
       default:
         icon = Icons.circle;
@@ -88,7 +94,7 @@ class ProfilePage extends StatelessWidget {
       trailing: const Icon(Icons.chevron_right),
       onTap: () {
         context.read<ProfileBloc>().add(OptionTapped(title));
-        
+
         if (title == "Profil") {
           Navigator.push(
             context,
@@ -96,22 +102,47 @@ class ProfilePage extends StatelessWidget {
               builder: (context) => const PersonalDetailsPage(),
             ),
           );
-        }
-        if (title == "Settings") {
+        } else if (title == "Settings") {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const SettingsPage(),
             ),
           );
-        }
-        if (title == "FAQ") {
+        } else if (title == "FAQ") {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const FaqPage(),
             ),
           );
+        } else if (title == "Çıkış Yap") {
+          showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Çıkış Yap'),
+              content: const Text('Çıkış yapmak istediğinizden emin misiniz?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: const Text('İptal'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: const Text('Çıkış Yap'),
+                ),
+              ],
+            ),
+          ).then((shouldLogout) async {
+            if (shouldLogout == true) {
+              await context.read<AuthCubit>().logout();
+              if (context.mounted) {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) =>  SignInPage()),
+                );
+              }
+            }
+          });
         }
       },
     );

@@ -1,15 +1,15 @@
-// ignore_for_file: unused_import
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CategoryItem extends StatelessWidget {
   final String label;
-  final String iconPath;
+  final IconData icon;
 
   const CategoryItem({
+    Key? key,
     required this.label,
-    required this.iconPath,
-  });
+    required this.icon,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +21,10 @@ class CategoryItem extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Image.asset(
-            iconPath,
-            width: 20,
-            height: 20,
+          Icon(
+            icon,
             color: Colors.black,
-            errorBuilder: (_, __, ___) => Icon(Icons.error, color: Colors.black, size: 20),
+            size: 20,
           ),
           SizedBox(width: 6),
           Text(

@@ -13,7 +13,7 @@ class ProfileState {
     return ProfileState(
       username: "Cagatay",
       subtitle: "Gezify üyesi",
-      options: ["Profil", "Payment", "Settings", "FAQ"],
+      options: ["Profil", "Seyahat Geçmişi", "Settings", "FAQ", "Çıkış Yap"],
     );
   }
 }
