@@ -13,10 +13,10 @@ import 'package:gezify/presentation/calender/calender_page.dart';
 import 'package:gezify/presentation/create_route/route_directed.dart';
 import 'package:gezify/presentation/home/presentation/cubits/navigation_cubit.dart';
 import 'package:gezify/presentation/home/presentation/pages/messages_page.dart';
-import 'package:gezify/presentation/profile_page/profile_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/destination_card.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/category_selector.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/category_item.dart';
+import 'package:gezify/presentation/profile_page/profile_page.dart';
 
 class HomePage extends StatefulWidget {
   final void Function()? togglePage;

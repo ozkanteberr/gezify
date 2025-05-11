@@ -7,3 +7,5 @@ class OptionTapped extends ProfileEvent {
 
   OptionTapped(this.option);
 }
+
+class Logout extends ProfileEvent {}
