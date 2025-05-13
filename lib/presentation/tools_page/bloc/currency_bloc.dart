@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'CurrencyEvent.dart';
-import 'CurrencyState.dart';
+import 'currency_event.dart';
+import 'currency_state.dart';
 
 class CurrencyBloc extends Bloc<CurrencyEvent, CurrencyState> {
   CurrencyBloc() : super(CurrencyInitial()) {
@@ -35,7 +35,8 @@ class CurrencyBloc extends Bloc<CurrencyEvent, CurrencyState> {
 
         emit(CurrencyLoaded(rates));
       } else {
-        emit(CurrencyError('Veri alınamadı. Hata kodu: ${response.statusCode}'));
+        emit(
+            CurrencyError('Veri alınamadı. Hata kodu: ${response.statusCode}'));
       }
     } catch (e) {
       emit(CurrencyError('Veri alınırken bir hata oluştu: $e'));

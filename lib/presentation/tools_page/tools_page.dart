@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gezify/presentation/tools_page/bloc/CurrencyBloc.dart';
-import 'package:gezify/presentation/tools_page/bloc/CurrencyEvent.dart';
-import 'package:gezify/presentation/tools_page/bloc/CurrencyState.dart';
-
+import 'package:gezify/presentation/tools_page/bloc/currency_bloc.dart';
+import 'package:gezify/presentation/tools_page/bloc/currency_event.dart';
+import 'package:gezify/presentation/tools_page/bloc/currency_state.dart';
 
 class ToolsPage extends StatelessWidget {
   final bool hasBusTicket;
@@ -71,14 +70,15 @@ class ToolsPage extends StatelessWidget {
         subtitle: const Text("İstanbul: 22°C, Güneşli"),
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Hava durumu detaylarına gidiliyor...')),
+            const SnackBar(
+                content: Text('Hava durumu detaylarına gidiliyor...')),
           );
         },
       ),
     );
   }
 
-   Widget _buildCurrencyCard(BuildContext context) {
+  Widget _buildCurrencyCard(BuildContext context) {
     return BlocProvider(
       create: (context) => CurrencyBloc()..add(FetchCurrencyRates()),
       child: BlocBuilder<CurrencyBloc, CurrencyState>(
@@ -92,15 +92,18 @@ class ToolsPage extends StatelessWidget {
             final eur = state.rates['EUR']?.toStringAsFixed(2) ?? 'N/A';
 
             return Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
               elevation: 3,
               child: ListTile(
-                leading: const Icon(CupertinoIcons.money_dollar, color: Colors.green),
+                leading: const Icon(CupertinoIcons.money_dollar,
+                    color: Colors.green),
                 title: const Text("Döviz Kurları"),
                 subtitle: Text("USD/TRY: $usd  |  EUR/TRY: $eur"),
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Döviz kuru detayları yükleniyor...')),
+                    const SnackBar(
+                        content: Text('Döviz kuru detayları yükleniyor...')),
                   );
                 },
               ),
@@ -112,6 +115,4 @@ class ToolsPage extends StatelessWidget {
       ),
     );
   }
-
-
 }
