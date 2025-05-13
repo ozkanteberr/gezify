@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:gezify/presentation/create_route/route_page.dart';
 
@@ -8,95 +7,89 @@ class RouteDirected extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
-          "Rota Yönetimi",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        title: const Text("Rota Yönetimi", 
+              style: TextStyle(fontWeight: FontWeight.bold)),
         centerTitle: true,
+        elevation: 4,
+        shadowColor: Colors.blue.withOpacity(0.2),
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF2193b0), Color(0xFF6dd5ed)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _glassButton(
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildFeatureButton(
+              context: context,
+              icon: Icons.add_location_alt,
+              title: "Rota Oluştur",
+              color: Colors.blue,
+              onTap: () => Navigator.push(
                 context,
-                icon: Icons.add_location_alt_outlined,
-                title: "Rota Oluştur",
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const RoutePage()),
-                  );
-                },
-              ),
-              const SizedBox(height: 25),
-              _glassButton(
-                context,
-                icon: Icons.favorite_border,
-                title: "Favori Rotaları Gör",
-                onTap: () => print("Favori Rotalar"),
-              ),
-              const SizedBox(height: 25),
-              _glassButton(
-                context,
-                icon: Icons.list_alt_outlined,
-                title: "Kaydedilen Rotalar",
-                onTap: () => print("İste Rotalarım"),
-              ),
-            ],
-          ),
+                MaterialPageRoute(builder: (context) => const RoutePage()),
+            ),
+            ),
+            const SizedBox(height: 25),
+            _buildFeatureButton(
+              context: context,
+              icon: Icons.favorite,
+              title: "Favori Rotaları Gör",
+              color: Colors.pink,
+              onTap: () => print("Favori Rotalar"),
+            ),
+            const SizedBox(height: 25),
+            _buildFeatureButton(
+              context: context,
+              icon: Icons.list_alt,
+              title: "Kaydedilen Rotalar",
+              color: Colors.purple,
+              onTap: () => print("İste Rotalarım"),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _glassButton(BuildContext context,
-      {required IconData icon,
-      required String title,
-      required VoidCallback onTap}) {
-    return GestureDetector(
+  Widget _buildFeatureButton({
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
       onTap: onTap,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(25),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            width: MediaQuery.of(context).size.width * 0.85,
-            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(25),
-              border: Border.all(color: Colors.white.withOpacity(0.2)),
+      borderRadius: BorderRadius.circular(20),
+      splashColor: color.withOpacity(0.2),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: color.withOpacity(0.3),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            )
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: Colors.white, size: 28),
+            const SizedBox(width: 15),
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w600
+              ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon, color: Colors.white, size: 28),
-                const SizedBox(width: 12),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          ],
         ),
       ),
     );
