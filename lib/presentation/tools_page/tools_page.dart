@@ -35,6 +35,7 @@ class ToolsPage extends StatelessWidget {
               _buildToolCard(context, "Uçak Bileti", CupertinoIcons.airplane),
             _buildWeatherCard(context),
             _buildCurrencyCard(context), // BLoC ile döviz kartı
+            _buildCurrencyCard(context), // BLoC ile döviz kartı
           ],
         ),
       ),
