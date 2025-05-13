@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gezify/presentation/tools_page/bloc/CurrencyBloc.dart';
 import 'package:gezify/presentation/tools_page/bloc/CurrencyEvent.dart';
 import 'package:gezify/presentation/tools_page/bloc/CurrencyState.dart';
+import 'package:gezify/presentation/tools_page/music_page/music_page.dart';
 
 
 class ToolsPage extends StatelessWidget {
@@ -35,7 +36,8 @@ class ToolsPage extends StatelessWidget {
             if (hasPlaneTicket)
               _buildToolCard(context, "Uçak Bileti", CupertinoIcons.airplane),
             _buildWeatherCard(context),
-            _buildCurrencyCard(context), // BLoC ile döviz kartı
+            _buildCurrencyCard(context),
+            _buildMusicCard(context), // MÜZİK kartı eklendi
           ],
         ),
       ),
@@ -78,7 +80,7 @@ class ToolsPage extends StatelessWidget {
     );
   }
 
-   Widget _buildCurrencyCard(BuildContext context) {
+  Widget _buildCurrencyCard(BuildContext context) {
     return BlocProvider(
       create: (context) => CurrencyBloc()..add(FetchCurrencyRates()),
       child: BlocBuilder<CurrencyBloc, CurrencyState>(
@@ -94,6 +96,7 @@ class ToolsPage extends StatelessWidget {
             return Card(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               elevation: 3,
+              margin: const EdgeInsets.only(bottom: 16),
               child: ListTile(
                 leading: const Icon(CupertinoIcons.money_dollar, color: Colors.green),
                 title: const Text("Döviz Kurları"),
@@ -113,5 +116,23 @@ class ToolsPage extends StatelessWidget {
     );
   }
 
-
+ Widget _buildMusicCard(BuildContext context) {
+  return Card(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    elevation: 3,
+    margin: const EdgeInsets.only(bottom: 16),
+    child: ListTile(
+      leading: const Icon(CupertinoIcons.music_note, color: Colors.purple),
+      title: const Text("Müzik"),
+      subtitle: const Text("Seyahatiniz boyunca size eşlik edecek şarkılar"),
+      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MusicPage()),
+        );
+      },
+    ),
+  );
+}
 }

@@ -8,6 +8,7 @@ import 'package:gezify/presentation/auth/presentation/cubits/auth_states.dart';
 import 'package:gezify/presentation/auth/presentation/pages/auth_page.dart';
 import 'package:gezify/presentation/home/presentation/cubits/navigation_cubit.dart';
 import 'package:gezify/presentation/home/presentation/pages/home_page.dart';
+import 'package:gezify/presentation/spotify/cubits/spotify_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
             create: (context) => AuthCubit(authRepo: authRepo)..checkUser()),
         BlocProvider(create: (context) => NavigationCubit()),
+        BlocProvider(create: (context) => SpotifyCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
