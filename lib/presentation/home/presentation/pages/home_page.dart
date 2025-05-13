@@ -19,8 +19,6 @@ import 'package:gezify/presentation/home/presentation/pages/widgets/category_sel
 import 'package:gezify/presentation/home/presentation/pages/widgets/category_item.dart';
 import 'package:gezify/presentation/profile_page/profile_page.dart';
 
-
-
 class HomePage extends StatefulWidget {
   final void Function()? togglePage;
   const HomePage({super.key, this.togglePage});
