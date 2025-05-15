@@ -1,22 +1,17 @@
-// ignore_for_file: unused_import
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gezify/common/widgets/app_bar.dart';
-import 'package:gezify/presentation/auth/domain/entities/app_user.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_states.dart';
 import 'package:gezify/presentation/auth/presentation/pages/sign_in.dart';
-import 'package:gezify/presentation/auth/presentation/pages/sign_up.dart';
 import 'package:gezify/presentation/calender/calender_page.dart';
 import 'package:gezify/presentation/create_route/route_directed.dart';
-import 'package:gezify/presentation/home/presentation/cubits/navigation_cubit.dart';
+import 'package:gezify/presentation/home/presentation/cubits/destination/destination_cubit.dart';
+import 'package:gezify/presentation/home/presentation/cubits/navigation/navigation_cubit.dart';
+import 'package:gezify/presentation/home/presentation/pages/widgets/category/category_item.dart';
 import 'package:gezify/presentation/tools_page/tools_page.dart';
-import 'package:gezify/presentation/home/presentation/pages/widgets/destination_card.dart';
-import 'package:gezify/presentation/home/presentation/pages/widgets/category_selector.dart';
-import 'package:gezify/presentation/home/presentation/pages/widgets/category_item.dart';
+import 'package:gezify/presentation/home/presentation/pages/widgets/destination/destination_card.dart';
+import 'package:gezify/presentation/home/presentation/pages/widgets/category/category_selector.dart';
 import 'package:gezify/presentation/profile_page/profile_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -163,19 +158,24 @@ class _HomePageState extends State<HomePage> {
 
             // Kategori seçici
             CategorySelector(
-  categories: [
-    CategoryItem(label: "Tarihi Yerler", icon: CupertinoIcons.time),
-    CategoryItem(label: "Müzeler", icon: CupertinoIcons.book),
-    CategoryItem(label: "Deniz / Sahil", icon: CupertinoIcons.brightness),
-    CategoryItem(label: "Doğa / Orman", icon: CupertinoIcons.leaf_arrow_circlepath),
-    CategoryItem(label: "Yerel Lezzetler / Restoranlar", icon: CupertinoIcons.square_arrow_up_on_square),
-    CategoryItem(label: "Dini Mekanlar", icon: CupertinoIcons.moon),
-  ],
-  selectedColor: Colors.blue,
-  unselectedColor: Colors.grey,
-  itemRadius: 25,
-),
-const SizedBox(height: 40),
+              categories: [
+                CategoryItem(label: "Tarihi Yerler", icon: CupertinoIcons.time),
+                CategoryItem(label: "Müzeler", icon: CupertinoIcons.book),
+                CategoryItem(
+                    label: "Deniz / Sahil", icon: CupertinoIcons.brightness),
+                CategoryItem(
+                    label: "Doğa / Orman",
+                    icon: CupertinoIcons.leaf_arrow_circlepath),
+                CategoryItem(
+                    label: "Yerel Lezzetler / Restoranlar",
+                    icon: CupertinoIcons.square_arrow_up_on_square),
+                CategoryItem(label: "Dini Mekanlar", icon: CupertinoIcons.moon),
+              ],
+              selectedColor: Colors.blue,
+              unselectedColor: Colors.grey,
+              itemRadius: 25,
+            ),
+            const SizedBox(height: 40),
 
             // Best Destination başlık
             Row(
@@ -198,31 +198,30 @@ const SizedBox(height: 40),
             const SizedBox(height: 16),
 
             // Aşağı kaydırmalı destinasyonlar
-            Column(
-              children: [
-                DestinationCard(
-                  imageUrl: 'assets/images/app_logo.png',
-                  title: 'Hirosima Place Tokyo',
-                  location: 'Tokyo, Japan',
-                  rating: 4.8,
-                  onTap: () {},
-                ),
-                DestinationCard(
-                  imageUrl: 'assets/images/trabzon.jpg',
-                  title: 'Seoul Garden',
-                  location: 'South Korea',
-                  rating: 4.6,
-                  onTap: () {},
-                ),
-                DestinationCard(
-                  imageUrl: 'assets/images/uzungöl.jpg',
-                  title: 'Golden Temple',
-                  location: 'India',
-                  rating: 4.9,
-                  onTap: () {},
-                ),
-              ],
-            )
+            BlocBuilder<DestinationCubit, DestinationState>(
+              builder: (context, state) {
+                if (state is DestinationLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is DestinationLoaded) {
+                  return Column(
+                    children: state.destinations.map((destination) {
+                      return DestinationCard(
+                        imageUrl: destination.bannerImage,
+                        title: destination.title,
+                        location: destination.adress,
+                        rating: destination.rating,
+                        onTap: () {
+                          // Detay sayfasına yönlendirme yapılabilir
+                        },
+                      );
+                    }).toList(),
+                  );
+                } else if (state is DestinationError) {
+                  return Text(state.message);
+                }
+                return const SizedBox.shrink();
+              },
+            ),
           ],
         ),
       ),
@@ -266,5 +265,3 @@ const SizedBox(height: 40),
     );
   }
 }
-
-
