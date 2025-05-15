@@ -1,9 +1,14 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gezify/presentation/tools_page/bloc/currency_bloc.dart';
 import 'package:gezify/presentation/tools_page/bloc/currency_event.dart';
 import 'package:gezify/presentation/tools_page/bloc/currency_state.dart';
+import 'package:gezify/presentation/tools_page/weather/bloc/weather_details_page.dart';
+
+
 
 class ToolsPage extends StatelessWidget {
   final bool hasBusTicket;
@@ -34,7 +39,7 @@ class ToolsPage extends StatelessWidget {
             if (hasPlaneTicket)
               _buildToolCard(context, "Uçak Bileti", CupertinoIcons.airplane),
             _buildWeatherCard(context),
-            _buildCurrencyCard(context), // BLoC ile döviz kartı
+            _buildCurrencyCard(context),
           ],
         ),
       ),
@@ -69,11 +74,18 @@ class ToolsPage extends StatelessWidget {
         title: const Text("Hava Durumu"),
         subtitle: const Text("İstanbul: 22°C, Güneşli"),
         onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('Hava durumu detaylarına gidiliyor...')),
-          );
-        },
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text('Hava durumu detaylarına gidiliyor...'),
+      duration: Duration(seconds: 1), // 1 saniye göster
+    ),
+  ).closed.then((_) { // SnackBar kapandıktan sonra
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => WeatherDetailsPage()),
+    );
+  });
+},
       ),
     );
   }
@@ -92,18 +104,16 @@ class ToolsPage extends StatelessWidget {
             final eur = state.rates['EUR']?.toStringAsFixed(2) ?? 'N/A';
 
             return Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               elevation: 3,
+              margin: const EdgeInsets.only(bottom: 16),
               child: ListTile(
-                leading: const Icon(CupertinoIcons.money_dollar,
-                    color: Colors.green),
+                leading: const Icon(CupertinoIcons.money_dollar, color: Colors.green),
                 title: const Text("Döviz Kurları"),
                 subtitle: Text("USD/TRY: $usd  |  EUR/TRY: $eur"),
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Döviz kuru detayları yükleniyor...')),
+                    const SnackBar(content: Text('Döviz kuru detayları yükleniyor...')),
                   );
                 },
               ),
@@ -115,4 +125,7 @@ class ToolsPage extends StatelessWidget {
       ),
     );
   }
+
+ 
 }
+
