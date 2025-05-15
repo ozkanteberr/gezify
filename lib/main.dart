@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +7,9 @@ import 'package:gezify/presentation/auth/data/firebase_auth_repo.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_states.dart';
 import 'package:gezify/presentation/auth/presentation/pages/auth_page.dart';
-import 'package:gezify/presentation/home/presentation/cubits/navigation_cubit.dart';
+import 'package:gezify/presentation/home/data/destination_repository.dart';
+import 'package:gezify/presentation/home/presentation/cubits/destination/destination_cubit.dart';
+import 'package:gezify/presentation/home/presentation/cubits/navigation/navigation_cubit.dart';
 import 'package:gezify/presentation/home/presentation/pages/home_page.dart';
 
 void main() async {
@@ -30,6 +33,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(
             create: (context) => AuthCubit(authRepo: authRepo)..checkUser()),
         BlocProvider(create: (context) => NavigationCubit()),
+        BlocProvider(
+          create: (context) => DestinationCubit(
+            repository:
+                DestinationRepository(firestore: FirebaseFirestore.instance),
+          )..loadBestDestinations(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

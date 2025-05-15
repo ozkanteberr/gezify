@@ -1,0 +1,34 @@
+class Destination {
+  final String title;
+  final String adress;
+  final List<String> images;
+  final String bannerImage;
+  final bool isBestDestination;
+  final double latitude;
+  final double longitude;
+  final double rating;
+
+  Destination({
+    required this.title,
+    required this.adress,
+    required this.images,
+    required this.bannerImage,
+    required this.isBestDestination,
+    required this.latitude,
+    required this.longitude,
+    required this.rating,
+  });
+
+  factory Destination.fromMap(Map<String, dynamic> map) {
+    return Destination(
+      title: map['title'] ?? '',
+      adress: map['adress'] ?? '',
+      images: List<String>.from(map['detailImages'] ?? []),
+      bannerImage: map['bannerImage'] ?? '',
+      isBestDestination: map['isBestDestination'] ?? false,
+      latitude: map['latitude']?.toDouble() ?? 0.0,
+      longitude: map['longitude']?.toDouble() ?? 0.0,
+      rating: map['rating']?.toDouble() ?? 0.0,
+    );
+  }
+}
