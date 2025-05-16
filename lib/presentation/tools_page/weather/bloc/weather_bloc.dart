@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gezify/presentation/tools_page/weather/bloc/weather_service.dart';
+import 'package:gezify/presentation/tools_page/weather/service/weather_service.dart';
 import 'weather_event.dart';
 import 'weather_state.dart';
 

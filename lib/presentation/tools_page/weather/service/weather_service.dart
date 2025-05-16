@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:gezify/presentation/tools_page/weather/bloc/weather.dart';
+import 'package:gezify/presentation/tools_page/weather/widget/weather.dart';
 import 'package:http/http.dart' as http;
 
 
