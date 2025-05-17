@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gezify/presentation/auth/domain/entities/app_user.dart';
 import 'package:gezify/presentation/auth/domain/repos/auth_repo.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_states.dart';
-import 'package:gezify/presentation/home/presentation/pages/home_page.dart';
 
 class AuthCubit extends Cubit<AuthStates> {
   final AuthRepo authRepo;

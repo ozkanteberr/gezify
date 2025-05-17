@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gezify/firebase_options.dart';
-import 'package:intl/date_symbol_data_local.dart'; 
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:gezify/presentation/auth/data/firebase_auth_repo.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_states.dart';
@@ -12,6 +12,9 @@ import 'package:gezify/presentation/home/data/destination_repository.dart';
 import 'package:gezify/presentation/home/presentation/cubits/destination/destination_cubit.dart';
 import 'package:gezify/presentation/home/presentation/cubits/navigation/navigation_cubit.dart';
 import 'package:gezify/presentation/home/presentation/pages/home_page.dart';
+
+// RouteBloc importu eklenmeli
+import 'package:gezify/presentation/create_route/bloc/route_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +43,9 @@ class MyApp extends StatelessWidget {
             repository:
                 DestinationRepository(firestore: FirebaseFirestore.instance),
           )..loadBestDestinations(),
-        )
+        ),
+        // RouteBloc burada eklendi:
+        BlocProvider(create: (context) => RouteBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -52,7 +57,7 @@ class MyApp extends StatelessWidget {
             if (authState is Authanticated) {
               return HomePage();
             } else {
-              return Scaffold(
+              return const Scaffold(
                 body: Center(
                   child: CircularProgressIndicator(),
                 ),

@@ -1,9 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gezify/presentation/create_route/route_bloc.dart';
-import 'package:gezify/presentation/create_route/route_event.dart';
-import 'package:gezify/presentation/create_route/route_state.dart';
-import 'package:gezify/presentation/create_route/route_detail.dart';
+import 'package:gezify/presentation/create_route/bloc/route_bloc.dart';
+import 'package:gezify/presentation/create_route/bloc/route_event.dart';
+import 'package:gezify/presentation/create_route/bloc/route_state.dart';
+import 'package:gezify/presentation/create_route/presentation/route_detail.dart';
 
 class RoutePage extends StatelessWidget {
   const RoutePage({super.key});
@@ -17,8 +18,24 @@ class RoutePage extends StatelessWidget {
   }
 }
 
-class RouteView extends StatelessWidget {
+class RouteView extends StatefulWidget {
   const RouteView({super.key});
+
+  @override
+  State<RouteView> createState() => _RouteViewState();
+}
+
+class _RouteViewState extends State<RouteView> {
+  final TextEditingController _routeTitleController = TextEditingController();
+  bool _isPrivate = false;
+
+  @override
+  void dispose() {
+    //context.read<RouteBloc>().add(ClearRoutes());
+    _routeTitleController.clear();
+    _isPrivate = false;
+    super.dispose();
+  }
 
   void _editRouteNameDialog(
       BuildContext context, int index, String currentName) {
@@ -33,9 +50,7 @@ class RouteView extends StatelessWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: () => Navigator.pop(context),
             child: const Text('İptal'),
           ),
           ElevatedButton(
@@ -50,6 +65,36 @@ class RouteView extends StatelessWidget {
     );
   }
 
+  void _saveRoutes(BuildContext context) {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    final title = _routeTitleController.text.trim();
+
+    if (uid != null && title.isNotEmpty) {
+      context.read<RouteBloc>().add(
+            SaveRoutesToFirebase(
+              uid: uid,
+              listTitle: title,
+              isPrivate: _isPrivate,
+            ),
+          );
+
+      // Kaydettikten sonra formu ve durumu sıfırla
+      context.read<RouteBloc>().add(ClearRoutes());
+      _routeTitleController.clear();
+      setState(() {
+        _isPrivate = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Rota listesi kaydedildi.")),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Lütfen başlık girin.")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,20 +104,60 @@ class RouteView extends StatelessWidget {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text('Rotalarım',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
             const SizedBox(height: 10),
+            TextField(
+              controller: _routeTitleController,
+              decoration: const InputDecoration(
+                labelText: "Rota listesi başlığı (ör. Karadeniz Turu)",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const Text("Herkese Açık mı?"),
+                    const SizedBox(width: 10),
+                    Switch(
+                      value: !_isPrivate,
+                      onChanged: (value) {
+                        setState(() {
+                          _isPrivate = !value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                ElevatedButton.icon(
+                  onPressed: () => context.read<RouteBloc>().add(AddRoute()),
+                  icon: const Icon(Icons.add),
+                  label: const Text('Rota ekle'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: 10),
             Expanded(
               child: BlocBuilder<RouteBloc, RouteState>(
                 builder: (context, state) {
                   if (state.routes.isEmpty) {
                     return const Center(
-                        child: Text('Henüz rota eklenmedi',
-                            style: TextStyle(color: Colors.grey)));
+                      child: Text('Henüz rota eklenmedi',
+                          style: TextStyle(color: Colors.grey)),
+                    );
                   }
                   return ReorderableListView.builder(
                     itemCount: state.routes.length,
@@ -85,7 +170,8 @@ class RouteView extends StatelessWidget {
                         elevation: 2,
                         margin: const EdgeInsets.symmetric(vertical: 8),
                         child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 16),
                           title: Text(state.routes[index]),
                           onTap: () {
                             Navigator.push(
@@ -106,19 +192,13 @@ class RouteView extends StatelessWidget {
                                 onPressed: () => _editRouteNameDialog(
                                     context, index, state.routes[index]),
                               ),
-                              const SizedBox(width: 5),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5.0),
-                                child: IconButton(
-                                  icon: const Icon(Icons.delete,
-                                      color: Colors.red),
-                                  onPressed: () => context
-                                      .read<RouteBloc>()
-                                      .add(RemoveRoute(index)),
-                                ),
+                              IconButton(
+                                icon:
+                                    const Icon(Icons.delete, color: Colors.red),
+                                onPressed: () => context
+                                    .read<RouteBloc>()
+                                    .add(RemoveRoute(index)),
                               ),
-                              const SizedBox(width: 16),
                             ],
                           ),
                         ),
@@ -130,9 +210,7 @@ class RouteView extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton.icon(
-              onPressed: () {
-                context.read<RouteBloc>().add(SaveRoutes());
-              },
+              onPressed: () => _saveRoutes(context),
               icon: const Icon(Icons.save),
               label: const Text('Rotaları Kaydet'),
               style: ElevatedButton.styleFrom(
@@ -143,14 +221,9 @@ class RouteView extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 20),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => context.read<RouteBloc>().add(AddRoute()),
-        icon: const Icon(Icons.add),
-        label: const Text('Rota ekle'),
-        backgroundColor: Colors.blue,
       ),
     );
   }

@@ -6,6 +6,8 @@ class DestinationCard extends StatelessWidget {
   final String location;
   final double rating;
   final VoidCallback? onTap;
+  final VoidCallback? onAddToRoutePressed;
+  final VoidCallback? onShowOnMapPressed;
 
   const DestinationCard({
     Key? key,
@@ -14,6 +16,8 @@ class DestinationCard extends StatelessWidget {
     required this.location,
     required this.rating,
     this.onTap,
+    this.onAddToRoutePressed,
+    this.onShowOnMapPressed,
   }) : super(key: key);
 
   @override
@@ -51,6 +55,7 @@ class DestinationCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Başlık
                   Text(
                     title,
                     style: const TextStyle(
@@ -58,8 +63,11 @@ class DestinationCard extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
+
+                  // Adres satırı + Haritada Gör butonu
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Icon(Icons.location_on,
                           size: 14, color: Colors.grey),
@@ -72,9 +80,28 @@ class DestinationCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: onShowOnMapPressed,
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          minimumSize: const Size(0, 28),
+                        ),
+                        child: const Text(
+                          'Haritada Gör',
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6),
+
+                  // Rating satırı + Rotama Ekle butonu
                   Row(
                     children: [
                       const Icon(Icons.star, size: 14, color: Colors.orange),
@@ -82,6 +109,23 @@ class DestinationCard extends StatelessWidget {
                       Text(
                         rating.toString(),
                         style: const TextStyle(fontSize: 12),
+                      ),
+                      const Spacer(),
+                      ElevatedButton(
+                        onPressed: onAddToRoutePressed,
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          minimumSize: const Size(0, 28),
+                        ),
+                        child: const Text(
+                          'Rotama Ekle',
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),

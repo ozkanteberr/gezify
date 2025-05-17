@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:gezify/presentation/create_route/route_page.dart';
+import 'package:gezify/presentation/create_route/presentation/route_page.dart';
 
 class RouteDirected extends StatelessWidget {
   const RouteDirected({super.key});
@@ -37,7 +37,7 @@ class RouteDirected extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const RoutePage()),
+                    MaterialPageRoute(builder: (_) => RouteView()),
                   );
                 },
               ),
