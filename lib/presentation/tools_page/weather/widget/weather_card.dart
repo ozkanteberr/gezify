@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gezify/presentation/tools_page/weather/bloc/weather.dart';
+import 'package:gezify/presentation/tools_page/weather/widget/weather.dart';
 import 'package:intl/intl.dart';
 
 

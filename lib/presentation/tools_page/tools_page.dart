@@ -3,10 +3,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gezify/presentation/tools_page/bloc/currency_bloc.dart';
-import 'package:gezify/presentation/tools_page/bloc/currency_event.dart';
-import 'package:gezify/presentation/tools_page/bloc/currency_state.dart';
-import 'package:gezify/presentation/tools_page/weather/bloc/weather_details_page.dart';
+import 'package:gezify/presentation/tools_page/ai/ai_page.dart';
+import 'package:gezify/presentation/tools_page/currency/bloc/currency_bloc.dart';
+import 'package:gezify/presentation/tools_page/currency/bloc/currency_event.dart';
+import 'package:gezify/presentation/tools_page/currency/bloc/currency_state.dart';
+import 'package:gezify/presentation/tools_page/weather/widget/weather_details_page.dart';
+
+
 
 
 
@@ -40,6 +43,7 @@ class ToolsPage extends StatelessWidget {
               _buildToolCard(context, "Uçak Bileti", CupertinoIcons.airplane),
             _buildWeatherCard(context),
             _buildCurrencyCard(context),
+            _buildAiCard(context),
           ],
         ),
       ),
@@ -72,7 +76,6 @@ class ToolsPage extends StatelessWidget {
       child: ListTile(
         leading: const Icon(CupertinoIcons.cloud_sun, color: Colors.orange),
         title: const Text("Hava Durumu"),
-        subtitle: const Text("İstanbul: 22°C, Güneşli"),
         onTap: () {
   ScaffoldMessenger.of(context).showSnackBar(
     const SnackBar(
@@ -125,6 +128,24 @@ class ToolsPage extends StatelessWidget {
       ),
     );
   }
+  Widget _buildAiCard(BuildContext context) {
+  return Card(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    elevation: 3,
+    margin: const EdgeInsets.only(bottom: 16),
+    child: ListTile(
+      leading: const Icon(Icons.smart_toy, color: Colors.purple),
+      title: const Text("Yapay Zekaya Sor"),
+      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AiPage()),
+        );
+      },
+    ),
+  );
+}
 
  
 }
