@@ -2,24 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
 import 'package:gezify/presentation/auth/presentation/pages/sign_in.dart';
-import 'package:gezify/presentation/profile_page/FAQ.dart';
-import 'package:gezify/presentation/profile_page/personal_details_page.dart';
+import 'package:gezify/presentation/profile_page/presentation/FAQ.dart';
+import 'package:gezify/presentation/profile_page/presentation/personal_details_page.dart';
 import 'package:gezify/presentation/profile_page/bloc/profile_bloc.dart';
 import 'package:gezify/presentation/profile_page/bloc/profile_event.dart';
 import 'package:gezify/presentation/profile_page/bloc/profile_state.dart';
-import 'package:gezify/presentation/profile_page/settings_dart';
-
+import 'package:gezify/presentation/profile_page/presentation/settings.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final authCubit = context.read<AuthCubit>();
+
     return BlocProvider(
-      create: (_) => ProfileBloc()..add(LoadProfile()),
+      create: (_) => ProfileBloc(authCubit: authCubit)..add(LoadProfile()),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Profil'),
+          centerTitle: true,
         ),
         body: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, state) {
@@ -44,7 +46,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      state.subtitle,
+                      "Gezify Üyesi",
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
@@ -53,7 +55,8 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(height: 32),
                   ],
                 ),
-                ...state.options.map((option) => _buildListTile(context, option)),
+                ...state.options
+                    .map((option) => _buildListTile(context, option)),
               ],
             );
           },
@@ -138,7 +141,7 @@ class ProfilePage extends StatelessWidget {
               await context.read<AuthCubit>().logout();
               if (context.mounted) {
                 Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) =>  SignInPage()),
+                  MaterialPageRoute(builder: (context) => SignInPage()),
                 );
               }
             }

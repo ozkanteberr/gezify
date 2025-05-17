@@ -11,9 +11,21 @@ class ProfileState {
 
   factory ProfileState.initial() {
     return ProfileState(
-      username: "Cagatay",
+      username: "Kullanıcı", // varsayılan
       subtitle: "Gezify üyesi",
       options: ["Profil", "Seyahat Geçmişi", "Settings", "FAQ", "Çıkış Yap"],
+    );
+  }
+
+  ProfileState copyWith({
+    String? username,
+    String? subtitle,
+    List<String>? options,
+  }) {
+    return ProfileState(
+      username: username ?? this.username,
+      subtitle: subtitle ?? this.subtitle,
+      options: options ?? this.options,
     );
   }
 }

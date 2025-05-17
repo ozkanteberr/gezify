@@ -12,7 +12,7 @@ import 'package:gezify/presentation/home/presentation/pages/widgets/category/cat
 import 'package:gezify/presentation/tools_page/tools_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/destination/destination_card.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/category/category_selector.dart';
-import 'package:gezify/presentation/profile_page/profile_page.dart';
+import 'package:gezify/presentation/profile_page/presentation/profile_page.dart';
 
 class HomePage extends StatefulWidget {
   final void Function()? togglePage;
