@@ -13,7 +13,6 @@ import 'package:gezify/presentation/home/presentation/cubits/destination/destina
 import 'package:gezify/presentation/home/presentation/cubits/navigation/navigation_cubit.dart';
 import 'package:gezify/presentation/home/presentation/pages/home_page.dart';
 
-// RouteBloc importu eklenmeli
 import 'package:gezify/presentation/create_route/bloc/route_bloc.dart';
 
 void main() async {
@@ -44,7 +43,6 @@ class MyApp extends StatelessWidget {
                 DestinationRepository(firestore: FirebaseFirestore.instance),
           )..loadBestDestinations(),
         ),
-        // RouteBloc burada eklendi:
         BlocProvider(create: (context) => RouteBloc()),
       ],
       child: MaterialApp(

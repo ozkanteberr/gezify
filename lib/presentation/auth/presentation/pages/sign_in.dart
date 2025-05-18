@@ -5,6 +5,7 @@ import 'package:gezify/common/widgets/sign_with_google.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_states.dart';
 import 'package:gezify/presentation/auth/presentation/pages/sign_up.dart';
+import 'package:gezify/presentation/forgot_password/presentation/forgot_pw_screen.dart';
 import 'package:gezify/presentation/home/presentation/pages/home_page.dart';
 
 class SignInPage extends StatefulWidget {
@@ -91,7 +92,13 @@ class _SignInPageState extends State<SignInPage> {
                     Row(children: <Widget>[
                       Spacer(),
                       MaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ForgotPasswordScreen(),
+                              ));
+                        },
                         child: Text(
                           "Şifremi Unuttum",
                           style: Theme.of(context)
