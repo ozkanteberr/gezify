@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 
 class DestinationCard extends StatelessWidget {
   final String imageUrl;
@@ -42,15 +42,24 @@ class DestinationCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(16)),
-              child: Image.network(
-                imageUrl,
-                height: 180,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-            ),
+  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+  child: CachedNetworkImage(
+    imageUrl: imageUrl,
+    height: 180,
+    width: double.infinity,
+    fit: BoxFit.cover,
+    placeholder: (context, url) => Container(
+      height: 180,
+      color: Colors.grey[200],
+      child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+    ),
+    errorWidget: (context, url, error) => Container(
+      height: 180,
+      color: Colors.grey[300],
+      child: const Icon(Icons.broken_image, size: 40),
+    ),
+  ),
+),
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
