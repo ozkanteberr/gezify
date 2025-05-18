@@ -7,17 +7,18 @@ class Destination {
   final double latitude;
   final double longitude;
   final double rating;
+  final List<String> categoryList;
 
-  Destination({
-    required this.title,
-    required this.adress,
-    required this.images,
-    required this.bannerImage,
-    required this.isBestDestination,
-    required this.latitude,
-    required this.longitude,
-    required this.rating,
-  });
+  Destination(
+      {required this.title,
+      required this.adress,
+      required this.images,
+      required this.bannerImage,
+      required this.isBestDestination,
+      required this.latitude,
+      required this.longitude,
+      required this.rating,
+      required this.categoryList});
 
   factory Destination.fromMap(Map<String, dynamic> map) {
     return Destination(
@@ -29,6 +30,7 @@ class Destination {
       latitude: map['latitude']?.toDouble() ?? 0.0,
       longitude: map['longitude']?.toDouble() ?? 0.0,
       rating: map['rating']?.toDouble() ?? 0.0,
+      categoryList: List<String>.from(map['categoryList'] ?? ['tümü']),
     );
   }
 }

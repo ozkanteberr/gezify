@@ -8,10 +8,25 @@ class DestinationRepository {
 
   Future<List<Destination>> fetchBestDestinations() async {
     final snapshot = await firestore
-        .collection('bestDestination')
+        .collection('destination')
         .where('isBestDestination', isEqualTo: true)
         .get();
 
     return snapshot.docs.map((doc) => Destination.fromMap(doc.data())).toList();
+  }
+
+  Future<List<Destination>> getDestinationsByCategory(String category) async {
+    try {
+      final snapshot = await firestore
+          .collection('destination')
+          .where('categoryList', arrayContains: category)
+          .get();
+
+      return snapshot.docs
+          .map((doc) => Destination.fromMap(doc.data()))
+          .toList();
+    } catch (e) {
+      throw Exception('Kategoriye göre veri alınamadı: $e');
+    }
   }
 }

@@ -18,4 +18,15 @@ class DestinationCubit extends Cubit<DestinationState> {
       emit(DestinationError('Veriler alınamadı: $e'));
     }
   }
+
+  Future<void> fetchDestinationsByCategory(String category) async {
+    emit(DestinationLoading());
+
+    try {
+      final destinations = await repository.getDestinationsByCategory(category);
+      emit(DestinationLoaded(destinations));
+    } catch (e) {
+      emit(DestinationError('Veri alınamadı: $e'));
+    }
+  }
 }

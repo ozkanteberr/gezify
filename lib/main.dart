@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gezify/firebase_options.dart';
+import 'package:gezify/presentation/home/data/category_repository.dart';
+import 'package:gezify/presentation/home/presentation/cubits/category/category_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:gezify/presentation/auth/data/firebase_auth_repo.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
@@ -30,7 +32,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authRepo = FirebaseAuthRepo();
-
+    final firestore = FirebaseFirestore.instance;
+    final categoryRepo = CategoryRepository(firestore: firestore);
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthCubit(authRepo: authRepo)),
@@ -44,6 +47,10 @@ class MyApp extends StatelessWidget {
           )..loadBestDestinations(),
         ),
         BlocProvider(create: (context) => RouteBloc()),
+        BlocProvider<CategoryCubit>(
+          create: (context) =>
+              CategoryCubit(repository: categoryRepo)..fetchCategories(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

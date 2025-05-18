@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'category_item.dart'; // Güncel CategoryItem modelini kullanıyor.
+import 'category_item.dart';
 
 class CategorySelector extends StatefulWidget {
   final List<CategoryItem> categories;
@@ -30,7 +29,7 @@ class _CategorySelectorState extends State<CategorySelector> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50,
+      height: 40,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: widget.categories.length,
@@ -50,7 +49,10 @@ class _CategorySelectorState extends State<CategorySelector> {
         : widget.unselectedColor.withOpacity(0.1);
 
     return GestureDetector(
-      onTap: () => _handleCategorySelection(index),
+      onTap: () {
+        setState(() => _selectedIndex = index);
+        widget.onSelected?.call(index);
+      },
       child: Container(
         padding: widget.itemPadding,
         decoration: BoxDecoration(
@@ -74,10 +76,5 @@ class _CategorySelectorState extends State<CategorySelector> {
         ),
       ),
     );
-  }
-
-  void _handleCategorySelection(int index) {
-    setState(() => _selectedIndex = index);
-    widget.onSelected?.call(index);
   }
 }

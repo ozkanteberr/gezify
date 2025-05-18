@@ -7,17 +7,18 @@ import 'package:gezify/presentation/auth/presentation/pages/sign_in.dart';
 import 'package:gezify/presentation/calender/calender_page.dart';
 import 'package:gezify/presentation/create_route/presentation/route_directed.dart';
 import 'package:gezify/presentation/destination/pages/destination_detail_page.dart';
+import 'package:gezify/presentation/home/presentation/cubits/category/category_state.dart';
+import 'package:gezify/presentation/home/presentation/pages/widgets/utils.dart';
+import 'package:gezify/presentation/home/presentation/cubits/category/category_bloc.dart';
 import 'package:gezify/presentation/home/presentation/cubits/destination/destination_cubit.dart';
 import 'package:gezify/presentation/home/presentation/cubits/navigation/navigation_cubit.dart';
-import 'package:gezify/presentation/home/presentation/pages/widgets/category/category_item.dart';
 import 'package:gezify/presentation/tools_page/tools_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/destination/destination_card.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/category/category_selector.dart';
 import 'package:gezify/presentation/profile_page/presentation/profile_page.dart';
 
 class HomePage extends StatefulWidget {
-  final void Function()? togglePage;
-  const HomePage({super.key, this.togglePage});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -26,11 +27,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final authCubit = context.read<AuthCubit>();
   late final navigationCubit = context.read<NavigationCubit>();
-
   @override
   void initState() {
     super.initState();
     authCubit.checkUser();
+    context.read<CategoryCubit>().fetchCategories();
+    context.read<DestinationCubit>().loadBestDestinations();
   }
 
   Widget _getPage(int index) {
@@ -108,7 +110,7 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Explore the',
+                  "Güzel dünyayı",
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 28,
@@ -120,14 +122,14 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(fontSize: 28),
                     children: [
                       TextSpan(
-                        text: 'Beautiful ',
+                        text: "Gezify'la ",
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       TextSpan(
-                        text: 'world!',
+                        text: 'Keşfet!',
                         style: TextStyle(
                           color: Colors.orange,
                           fontWeight: FontWeight.bold,
@@ -144,7 +146,7 @@ class _HomePageState extends State<HomePage> {
             TextField(
               style: const TextStyle(color: Colors.black87),
               decoration: InputDecoration(
-                hintText: 'Search something...',
+                hintText: 'Nereye Gitmek İstersin?',
                 prefixIcon: const Icon(CupertinoIcons.search),
                 contentPadding: const EdgeInsets.symmetric(vertical: 16),
                 filled: true,
@@ -157,26 +159,36 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 20),
 
-            // Kategori seçici
-            CategorySelector(
-              categories: [
-                CategoryItem(label: "Tarihi Yerler", icon: CupertinoIcons.time),
-                CategoryItem(label: "Müzeler", icon: CupertinoIcons.book),
-                CategoryItem(
-                    label: "Deniz / Sahil", icon: CupertinoIcons.brightness),
-                CategoryItem(
-                    label: "Doğa / Orman",
-                    icon: CupertinoIcons.leaf_arrow_circlepath),
-                CategoryItem(
-                    label: "Yerel Lezzetler / Restoranlar",
-                    icon: CupertinoIcons.square_arrow_up_on_square),
-                CategoryItem(label: "Dini Mekanlar", icon: CupertinoIcons.moon),
-              ],
-              selectedColor: Colors.blue,
-              unselectedColor: Colors.grey,
-              itemRadius: 25,
+            BlocBuilder<CategoryCubit, CategoryState>(
+              builder: (context, state) {
+                if (state is CategoryLoading) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (state is CategoryLoaded) {
+                  final categories = state.categories;
+                  final categoryItems = mapToCategoryItems(categories);
+
+                  return CategorySelector(
+                    categories: categoryItems,
+                    onSelected: (index) {
+                      final selectedCategory = categoryItems[index].label;
+                      context
+                          .read<DestinationCubit>()
+                          .fetchDestinationsByCategory(selectedCategory);
+                    },
+                  );
+                } else if (state is CategoryError) {
+                  return Center(
+                      child: Text(
+                          'Kategori yüklenirken hata oluştu: ${state.message}'));
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
             ),
-            const SizedBox(height: 40),
+
+            // Kategori seçici
+
+            const SizedBox(height: 20),
 
             // Best Destination başlık
             Row(
@@ -198,14 +210,18 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 16),
 
-            // Aşağı kaydırmalı destinasyonlar
             BlocBuilder<DestinationCubit, DestinationState>(
               builder: (context, state) {
                 if (state is DestinationLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator());
                 } else if (state is DestinationLoaded) {
-                  return Column(
-                    children: state.destinations.map((destination) {
+                  final destinations = state.destinations;
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: destinations.length,
+                    itemBuilder: (context, index) {
+                      final destination = destinations[index];
                       return DestinationCard(
                         imageUrl: destination.bannerImage,
                         title: destination.title,
@@ -220,15 +236,22 @@ class _HomePageState extends State<HomePage> {
                             ),
                           );
                         },
+                        onAddToRoutePressed: () {
+                          // Rotaya ekle işlevi
+                        },
+                        onShowOnMapPressed: () {
+                          // Haritada göster işlevi
+                        },
                       );
-                    }).toList(),
+                    },
                   );
                 } else if (state is DestinationError) {
-                  return Text(state.message);
+                  return Center(child: Text('Hata: ${state.message}'));
+                } else {
+                  return SizedBox.shrink();
                 }
-                return const SizedBox.shrink();
               },
-            ),
+            )
           ],
         ),
       ),
