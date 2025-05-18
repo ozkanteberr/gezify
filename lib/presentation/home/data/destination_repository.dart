@@ -8,7 +8,7 @@ class DestinationRepository {
 
   Future<List<Destination>> fetchBestDestinations() async {
     final snapshot = await firestore
-        .collection('bestDestination')
+        .collection('destination')
         .where('isBestDestination', isEqualTo: true)
         .get();
 

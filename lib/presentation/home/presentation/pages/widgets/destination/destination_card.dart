@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class DestinationCard extends StatelessWidget {
   final String imageUrl;
   final String title;

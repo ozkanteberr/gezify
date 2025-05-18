@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gezify/presentation/tools_page/weather/widget/weather.dart';
 import 'package:intl/intl.dart';
 
-
 class WeatherCard extends StatelessWidget {
   final Weather weather;
 
@@ -40,7 +39,7 @@ class WeatherCard extends StatelessWidget {
                   children: [
                     Text(DateFormat.Hm().format(hour.time), style: const TextStyle(color: Colors.white)),
                     Image.network(
-                      'https://openweathermap.org/img/wn/${hour.iconCode}@2x.png',
+                      'https://openweathermap.org/img/wn/${hour.iconCode.replaceAll('n', 'd')}@2x.png',
                       width: 40,
                     ),
                     Text('${hour.temp.round()}°', style: const TextStyle(color: Colors.white)),
@@ -70,7 +69,7 @@ class WeatherCard extends StatelessWidget {
                       style: const TextStyle(color: Colors.white),
                     ),
                     Image.network(
-                      'https://openweathermap.org/img/wn/${day.iconCode}@2x.png',
+                      'https://openweathermap.org/img/wn/${day.iconCode.replaceAll('n', 'd')}@2x.png',
                       width: 40,
                     ),
                     Text('${day.tempMax.round()}° / ${day.tempMin.round()}°',
