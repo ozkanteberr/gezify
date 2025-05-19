@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gezify/firebase_options.dart';
 import 'package:gezify/presentation/home/data/category_repository.dart';
 import 'package:gezify/presentation/home/presentation/cubits/category/category_bloc.dart';
+import 'package:gezify/presentation/maps/bloc/map_screen_cubit.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:gezify/presentation/auth/data/firebase_auth_repo.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
@@ -50,6 +51,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<CategoryCubit>(
           create: (context) =>
               CategoryCubit(repository: categoryRepo)..fetchCategories(),
+        ),
+        BlocProvider<GoogleMapCubit>(
+          create: (_) => GoogleMapCubit(),
         ),
       ],
       child: MaterialApp(

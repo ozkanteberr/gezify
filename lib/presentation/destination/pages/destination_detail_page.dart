@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gezify/presentation/home/domain/entities/destination.dart';
+import 'package:gezify/presentation/maps/pages/map_screen.dart';
 
 class DestinationDetailPage extends StatefulWidget {
   final Destination destination;
@@ -63,7 +64,8 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                       Expanded(
                         child: Text(
                           destination.adress,
-                          style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.grey[700]),
                         ),
                       ),
                     ],
@@ -75,7 +77,8 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                       SizedBox(width: 6),
                       Text(
                         '${destination.rating}',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
@@ -88,16 +91,29 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                         child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.redAccent,
-                            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           onPressed: () {
-                            // Harita işlemleri burada yapılır
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    GoogleMapScreen(destination: destination),
+                              ),
+                            );
                           },
-                          icon: Icon(Icons.map),
-                          label: Text('Haritada Göster'),
+                          icon: Icon(
+                            Icons.map,
+                            color: Colors.white,
+                          ),
+                          label: Text(
+                            'Haritada Göster',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
                       SizedBox(width: 12),
@@ -105,18 +121,27 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                         child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
-                            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           onPressed: () {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("${destination.title} rotanıza eklendi!")),
+                              SnackBar(
+                                  content: Text(
+                                      "${destination.title} rotanıza eklendi!")),
                             );
                           },
-                          icon: Icon(Icons.add_location_alt),
-                          label: Text('Rotama Ekle'),
+                          icon: Icon(
+                            Icons.add_location_alt,
+                            color: Colors.white,
+                          ),
+                          label: Text(
+                            'Rotama Ekle',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
                     ],
@@ -148,9 +173,15 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 10),
-                  _buildReview("Mekan çok güzel, özellikle uçak teması çocuklar için harika!", "Ahmet K."),
-                  _buildReview("Pidesi çok lezzetliydi, çalışanlar da çok güler yüzlü.", "Elif D."),
-                  _buildReview("Gece ışıklandırması etkileyici, tekrar geleceğim.", "Murat B."),
+                  _buildReview(
+                      "Mekan çok güzel, özellikle uçak teması çocuklar için harika!",
+                      "Ahmet K."),
+                  _buildReview(
+                      "Pidesi çok lezzetliydi, çalışanlar da çok güler yüzlü.",
+                      "Elif D."),
+                  _buildReview(
+                      "Gece ışıklandırması etkileyici, tekrar geleceğim.",
+                      "Murat B."),
                   SizedBox(height: 20),
                   Divider(),
 
@@ -179,7 +210,8 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.redAccent,
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -187,7 +219,8 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                       onPressed: () {
                         final comment = _commentController.text.trim();
                         if (comment.isNotEmpty) {
-                          print("Yeni yorum: $comment"); // Burada backend'e gönderilebilir
+                          print(
+                              "Yeni yorum: $comment"); // Burada backend'e gönderilebilir
                           _commentController.clear();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text("Yorum gönderildi!")),

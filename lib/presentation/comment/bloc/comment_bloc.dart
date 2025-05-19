@@ -16,7 +16,8 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
     on<AddNewComment>(_onAddNewComment);
   }
 
-  Future<void> _onLoadComments(LoadComments event, Emitter<CommentState> emit) async {
+  Future<void> _onLoadComments(
+      LoadComments event, Emitter<CommentState> emit) async {
     emit(CommentLoading());
     try {
       final comments = await getComments(event.destinationId);
@@ -26,7 +27,8 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
     }
   }
 
-  Future<void> _onAddNewComment(AddNewComment event, Emitter<CommentState> emit) async {
+  Future<void> _onAddNewComment(
+      AddNewComment event, Emitter<CommentState> emit) async {
     if (state is CommentLoaded) {
       final currentState = state as CommentLoaded;
       try {

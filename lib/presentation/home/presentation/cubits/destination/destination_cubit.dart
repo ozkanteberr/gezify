@@ -29,4 +29,8 @@ class DestinationCubit extends Cubit<DestinationState> {
       emit(DestinationError('Veri alınamadı: $e'));
     }
   }
+
+  void selectDestination(Destination destination) {
+    emit(DestinationSelected(destination));
+  }
 }

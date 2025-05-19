@@ -30,7 +30,7 @@ class Destination {
       latitude: map['latitude']?.toDouble() ?? 0.0,
       longitude: map['longitude']?.toDouble() ?? 0.0,
       rating: map['rating']?.toDouble() ?? 0.0,
-      categoryList: List<String>.from(map['categoryList'] ?? ['tümü']),
+      categoryList: List<String>.from(map['categoryList'] ?? ['Tümü']),
     );
   }
 }

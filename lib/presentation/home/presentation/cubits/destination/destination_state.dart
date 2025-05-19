@@ -12,6 +12,12 @@ class DestinationLoaded extends DestinationState {
   DestinationLoaded(this.destinations);
 }
 
+class DestinationSelected extends DestinationState {
+  final Destination destination;
+
+  DestinationSelected(this.destination);
+}
+
 class DestinationError extends DestinationState {
   final String message;
 

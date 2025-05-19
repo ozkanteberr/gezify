@@ -12,10 +12,11 @@ import 'package:gezify/presentation/home/presentation/pages/widgets/utils.dart';
 import 'package:gezify/presentation/home/presentation/cubits/category/category_bloc.dart';
 import 'package:gezify/presentation/home/presentation/cubits/destination/destination_cubit.dart';
 import 'package:gezify/presentation/home/presentation/cubits/navigation/navigation_cubit.dart';
+import 'package:gezify/presentation/maps/pages/map_screen.dart';
 import 'package:gezify/presentation/tools_page/tools_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/destination/destination_card.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/category/category_selector.dart';
-import 'package:gezify/presentation/profile_page/presentation/profile_page.dart';
+import 'package:gezify/profile/profile_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -240,7 +241,16 @@ class _HomePageState extends State<HomePage> {
                           // Rotaya ekle işlevi
                         },
                         onShowOnMapPressed: () {
-                          // Haritada göster işlevi
+                          context
+                              .read<DestinationCubit>()
+                              .selectDestination(destination);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  GoogleMapScreen(destination: destination),
+                            ),
+                          );
                         },
                       );
                     },
