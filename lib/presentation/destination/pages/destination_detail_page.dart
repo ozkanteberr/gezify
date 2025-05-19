@@ -18,7 +18,6 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
   @override
   Widget build(BuildContext context) {
     final destination = widget.destination;
-
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
@@ -30,7 +29,7 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Görsel Kartı
+            // Banner Görseli
             Card(
               margin: EdgeInsets.all(16),
               shape: RoundedRectangleBorder(
@@ -84,7 +83,7 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                   ),
                   SizedBox(height: 20),
 
-                  // Haritada Göster ve Rotama Ekle Butonları
+                  // Haritada Göster & Rotama Ekle
                   Row(
                     children: [
                       Expanded(
@@ -106,10 +105,7 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                               ),
                             );
                           },
-                          icon: Icon(
-                            Icons.map,
-                            color: Colors.white,
-                          ),
+                          icon: Icon(Icons.map, color: Colors.white),
                           label: Text(
                             'Haritada Göster',
                             style: TextStyle(color: Colors.white),
@@ -134,10 +130,8 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                                       "${destination.title} rotanıza eklendi!")),
                             );
                           },
-                          icon: Icon(
-                            Icons.add_location_alt,
-                            color: Colors.white,
-                          ),
+                          icon:
+                              Icon(Icons.add_location_alt, color: Colors.white),
                           label: Text(
                             'Rotama Ekle',
                             style: TextStyle(color: Colors.white),
@@ -146,25 +140,31 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                       ),
                     ],
                   ),
+
                   SizedBox(height: 30),
 
-                  // Galeri
+                  // Galeri - Yatay kayan şekilde
                   Text(
                     "Fotoğraflar",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 10),
                   SizedBox(
-                    height: 180,
-                    child: PageView(
-                      controller: PageController(viewportFraction: 0.85),
-                      children: [
-                        _buildGalleryImage(destination.bannerImage),
-                        _buildGalleryImage('https://picsum.photos/500?1'),
-                        _buildGalleryImage('https://picsum.photos/500?2'),
-                      ],
+                    height: 160,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.only(right: 16),
+                      itemCount: destination.images.length,
+                      separatorBuilder: (context, index) => SizedBox(width: 12),
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: EdgeInsets.only(left: index == 0 ? 16 : 0),
+                          child: _buildGalleryImage(destination.images[index]),
+                        );
+                      },
                     ),
                   ),
+
                   SizedBox(height: 30),
 
                   // Yorumlar
@@ -185,7 +185,7 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                   SizedBox(height: 20),
                   Divider(),
 
-                  // Yorum Yapma Alanı
+                  // Yorum Yap
                   Text(
                     "Yorum Yap",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -219,8 +219,7 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                       onPressed: () {
                         final comment = _commentController.text.trim();
                         if (comment.isNotEmpty) {
-                          print(
-                              "Yeni yorum: $comment"); // Burada backend'e gönderilebilir
+                          print("Yeni yorum: $comment");
                           _commentController.clear();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text("Yorum gönderildi!")),
@@ -242,14 +241,13 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
   }
 
   Widget _buildGalleryImage(String imageUrl) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Image.network(
-          imageUrl,
-          fit: BoxFit.cover,
-        ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Image.network(
+        imageUrl,
+        height: 160,
+        width: 240,
+        fit: BoxFit.cover,
       ),
     );
   }
