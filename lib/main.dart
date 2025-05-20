@@ -6,6 +6,8 @@ import 'package:gezify/firebase_options.dart';
 import 'package:gezify/presentation/home/data/category_repository.dart';
 import 'package:gezify/presentation/home/presentation/cubits/category/category_bloc.dart';
 import 'package:gezify/presentation/maps/bloc/map_screen_cubit.dart';
+import 'package:gezify/presentation/splash/pages/onboarding_page.dart';
+import 'package:gezify/presentation/splash/pages/splash.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:gezify/presentation/auth/data/firebase_auth_repo.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
@@ -58,28 +60,14 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: BlocConsumer<AuthCubit, AuthStates>(
-          builder: (context, authState) {
-            if (authState is Unauthenticated) {
-              return AuthPage();
-            }
-            if (authState is Authanticated) {
-              return HomePage();
-            } else {
-              return const Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-          },
-          listener: (context, state) {
-            if (state is AuthError) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.message)));
-            }
-          },
-        ),
+        home: const SplashPage(),
+        routes: {
+    '/home': (context) => const HomePage(),
+    '/auth': (context) => const AuthPage(),
+    '/splash': (context) => const SplashPage(),
+    // varsa onboarding ekle:
+    '/onboarding': (context) => const OnboardingPage(),
+  },
       ),
     );
   }
