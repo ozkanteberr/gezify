@@ -20,6 +20,7 @@ class DestinationBloc extends Bloc<DestinationEvent, DestinationState> {
             title: data['title'],
             adress: data['adress'],
             bannerImage: data['bannerImage'],
+            description: data['description'] ,
             categoryList: List<String>.from(data['categoryList'] ?? []),
             isBestDestination: data['isBestDestination'] ?? false,
             images: List<String>.from(data['detailImages'] ?? []),

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gezify/presentation/create_route/bloc/c_route/route_bloc.dart';
-import 'package:gezify/presentation/create_route/bloc/c_route/route_event.dart';
 import 'package:gezify/presentation/home/domain/entities/destination.dart';
 import 'package:gezify/presentation/maps/pages/map_screen.dart';
 
@@ -59,6 +56,20 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                     style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 12),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.info_outline, color: Colors.blueAccent),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          destination.description,
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.grey[800]),
+                        ),
+                      ),
+                    ],
+                  ),
                   Row(
                     children: [
                       Icon(Icons.location_on, color: Colors.red[400]),
@@ -127,9 +138,11 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                             ),
                           ),
                           onPressed: () {
-                            context
-                                .read<RouteBloc>()
-                                .add(AddDestinationToRoute(destination));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      "${destination.title} rotanıza eklendi!")),
+                            );
                           },
                           icon:
                               Icon(Icons.add_location_alt, color: Colors.white),

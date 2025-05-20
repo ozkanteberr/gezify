@@ -8,11 +8,13 @@ class Destination {
   final double longitude;
   final double rating;
   final List<String> categoryList;
+  final String description;
 
   Destination(
       {required this.title,
       required this.adress,
       required this.images,
+      required this.description,
       required this.bannerImage,
       required this.isBestDestination,
       required this.latitude,
@@ -24,6 +26,7 @@ class Destination {
     return Destination(
       title: map['title'] ?? '',
       adress: map['adress'] ?? '',
+      description: map['description'] ?? '',
       images: List<String>.from(map['detailImages'] ?? []),
       bannerImage: map['bannerImage'] ?? '',
       isBestDestination: map['isBestDestination'] ?? false,
