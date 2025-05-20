@@ -1,3 +1,3 @@
-abstract class DestinationDetailEvent {}
+abstract class DestinationEvent {}
 
-class LoadDestinationDetail extends DestinationDetailEvent {}
+class LoadDestinations extends DestinationEvent {}

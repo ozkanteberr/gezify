@@ -1,16 +1,16 @@
-import 'package:gezify/presentation/destination/model/destination_model.dart';
+import 'package:gezify/presentation/home/domain/entities/destination.dart';
 
-abstract class DestinationDetailState {}
+abstract class DestinationState {}
 
-class DestinationLoading extends DestinationDetailState {}
+class DestinationLoading extends DestinationState {}
 
-class DestinationLoaded extends DestinationDetailState {
-  final DestinationInfo destination;
+class DestinationLoaded extends DestinationState {
+  final List<Destination> destinations;
 
-  DestinationLoaded(this.destination);
+  DestinationLoaded(this.destinations);
 }
 
-class DestinationError extends DestinationDetailState {
+class DestinationError extends DestinationState {
   final String message;
 
   DestinationError(this.message);

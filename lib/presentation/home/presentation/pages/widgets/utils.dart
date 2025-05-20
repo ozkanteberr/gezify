@@ -3,12 +3,22 @@ import 'package:gezify/presentation/home/presentation/pages/widgets/category/cat
 
 IconData getIconForCategory(String categoryName) {
   switch (categoryName.toLowerCase()) {
-    case 'doğa':
-      return Icons.nature;
-    case 'tarih':
+    case 'tümü':
+      return Icons.category;
+    case 'semtin favorileri':
       return Icons.account_balance;
-    case 'plaj':
+    case 'tarihi yerler':
+      return Icons.tour;
+    case 'müzeler':
+      return Icons.account_balance;
+    case 'deniz\\sahil':
       return Icons.beach_access;
+    case 'doğa\\orman':
+      return Icons.forest;
+    case 'yerel lezzetler\\restoranlar':
+      return Icons.food_bank;
+    case 'dini mekanlar':
+      return Icons.nightlight_round;
     default:
       return Icons.category;
   }

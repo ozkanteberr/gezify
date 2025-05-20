@@ -1,33 +1,37 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gezify/presentation/destination/bloc/destination_event.dart';
 import 'package:gezify/presentation/destination/bloc/destination_state.dart';
-import 'package:gezify/presentation/destination/model/destination_model.dart';
+import 'package:gezify/presentation/home/domain/entities/destination.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class DestinationDetailBloc
-    extends Bloc<DestinationDetailEvent, DestinationDetailState> {
-  DestinationDetailBloc() : super(DestinationLoading()) {
-    on<LoadDestinationDetail>((event, emit) async {
+class DestinationBloc extends Bloc<DestinationEvent, DestinationState> {
+  final FirebaseFirestore firestore;
+
+  DestinationBloc({required this.firestore}) : super(DestinationLoading()) {
+    on<LoadDestinations>((event, emit) async {
+      emit(DestinationLoading());
+
       try {
-        await Future.delayed(const Duration(seconds: 1)); // Simülasyon
-        final destination = DestinationInfo(
-          name: "Uzungöl",
-          adress: 'Çaykara, Trabzon',
-          imageUrl:
-              "https://seralakehotel.com/trabzonda-gezilecek-yerler/uzungol/",
-          detailImage: [
-            "https://seralakehotel.com/trabzonda-gezilecek-yerler/uzungol/",
-            "https://www.google.com/imgres?q=uzung%C3%B6l&imgurl=https%3A%2F%2Fseralakehotel.com%2Fwp-content%2Fuploads%2F2025%2F04%2FTrabzon-Uzungol-Gezi-Rehberi-8.webp&imgrefurl=https%3A%2F%2Fseralakehotel.com%2Ftrabzonda-gezilecek-yerler%2Fuzungol%2F&docid=6Mx2yZxN3pvd0M&tbnid=Rc-aV-xp8UrDuM&vet=12ahUKEwjsxey68KqNAxUySvEDHTikKQcQM3oECGkQAA..i&w=1600&h=1069&hcb=2&ved=2ahUKEwjsxey68KqNAxUySvEDHTikKQcQM3oECGkQAA",
-            "https://seralakehotel.com/trabzonda-gezilecek-yerler/uzungol/",
-          ],
-          description: 'Trabzon Uzungöl detay',
-          latitude: 40.619494,
-          longitude: 40.235097,
-          rating: 4.7,
-        );
+        final snapshot = await firestore.collection('destination').get();
 
-        emit(DestinationLoaded(destination));
+        final destinations = snapshot.docs.map((doc) {
+          final data = doc.data();
+          return Destination(
+            title: data['title'],
+            adress: data['adress'],
+            bannerImage: data['bannerImage'],
+            categoryList: List<String>.from(data['categoryList'] ?? []),
+            isBestDestination: data['isBestDestination'] ?? false,
+            images: List<String>.from(data['detailImages'] ?? []),
+            latitude: data['latitude'],
+            longitude: data['longitude'],
+            rating: (data['rating'] ?? 0).toDouble(),
+          );
+        }).toList();
+
+        emit(DestinationLoaded(destinations));
       } catch (e) {
-        emit(DestinationError("Veri yüklenemedi"));
+        emit(DestinationError('Veriler yüklenemedi'));
       }
     });
   }

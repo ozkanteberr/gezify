@@ -5,6 +5,8 @@ import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_states.dart';
 import 'package:gezify/presentation/auth/presentation/pages/sign_in.dart';
 import 'package:gezify/presentation/calender/calender_page.dart';
+import 'package:gezify/presentation/create_route/bloc/c_route/route_bloc.dart';
+import 'package:gezify/presentation/create_route/bloc/c_route/route_event.dart';
 import 'package:gezify/presentation/create_route/presentation/route_directed.dart';
 import 'package:gezify/presentation/destination/pages/destination_detail_page.dart';
 import 'package:gezify/presentation/home/presentation/cubits/category/category_state.dart';
@@ -238,7 +240,9 @@ class _HomePageState extends State<HomePage> {
                           );
                         },
                         onAddToRoutePressed: () {
-                          // Rotaya ekle işlevi
+                          context
+                              .read<RouteBloc>()
+                              .add(AddDestinationToRoute(destination));
                         },
                         onShowOnMapPressed: () {
                           context

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gezify/presentation/create_route/bloc/c_route/route_bloc.dart';
+import 'package:gezify/presentation/create_route/bloc/c_route/route_event.dart';
 import 'package:gezify/presentation/home/domain/entities/destination.dart';
 import 'package:gezify/presentation/maps/pages/map_screen.dart';
 
@@ -128,11 +131,9 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                             ),
                           ),
                           onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text(
-                                      "${destination.title} rotanıza eklendi!")),
-                            );
+                            context
+                                .read<RouteBloc>()
+                                .add(AddDestinationToRoute(destination));
                           },
                           icon: Icon(
                             Icons.add_location_alt,

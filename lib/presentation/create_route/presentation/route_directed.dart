@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:gezify/presentation/create_route/presentation/my_routes.dart';
 import 'package:gezify/presentation/create_route/presentation/route_page.dart';
 
 class RouteDirected extends StatelessWidget {
@@ -19,13 +20,12 @@ class RouteDirected extends StatelessWidget {
         centerTitle: true,
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF2193b0), Color(0xFF6dd5ed)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(
+                  'assets/images/back_img.jpg',
+                ),
+                fit: BoxFit.cover)),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -45,15 +45,28 @@ class RouteDirected extends StatelessWidget {
               _glassButton(
                 context,
                 icon: Icons.favorite_border,
-                title: "Favori Rotaları Gör",
+                title: "Herkese Açık Rotalar",
                 onTap: () => print("Favori Rotalar"),
               ),
               const SizedBox(height: 25),
               _glassButton(
                 context,
-                icon: Icons.list_alt_outlined,
+                icon: Icons.save_rounded,
                 title: "Kaydedilen Rotalar",
                 onTap: () => print("İste Rotalarım"),
+              ),
+              const SizedBox(height: 25),
+              _glassButton(
+                context,
+                icon: Icons.list_alt,
+                title: "Benim Rotalarım",
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MyRoutesPage(),
+                      ));
+                },
               ),
             ],
           ),
@@ -79,17 +92,17 @@ class RouteDirected extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.15),
               borderRadius: BorderRadius.circular(25),
-              border: Border.all(color: Colors.white.withOpacity(0.2)),
+              border: Border.all(color: Colors.black.withOpacity(0.2)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: Colors.white, size: 28),
+                Icon(icon, color: Colors.black, size: 28),
                 const SizedBox(width: 12),
                 Text(
                   title,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                   ),
