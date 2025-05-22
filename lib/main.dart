@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:gezify/firebase_options.dart';
 import 'package:gezify/presentation/home/data/category_repository.dart';
 import 'package:gezify/presentation/home/presentation/cubits/category/category_bloc.dart';
@@ -26,6 +27,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await initializeDateFormatting('tr', null);
+  await Geolocator.requestPermission();
   runApp(const MyApp());
 }
 
@@ -62,12 +64,12 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: const SplashPage(),
         routes: {
-    '/home': (context) => const HomePage(),
-    '/auth': (context) => const AuthPage(),
-    '/splash': (context) => const SplashPage(),
-    // varsa onboarding ekle:
-    '/onboarding': (context) => const OnboardingPage(),
-  },
+          '/home': (context) => const HomePage(),
+          '/auth': (context) => const AuthPage(),
+          '/splash': (context) => const SplashPage(),
+          // varsa onboarding ekle:
+          '/onboarding': (context) => const OnboardingPage(),
+        },
       ),
     );
   }

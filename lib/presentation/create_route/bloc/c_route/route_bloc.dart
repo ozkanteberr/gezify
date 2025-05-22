@@ -1,8 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gezify/presentation/home/domain/entities/destination.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:uuid/uuid.dart';
 import 'route_event.dart';
 import 'route_state.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:geolocator/geolocator.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 class RouteBloc extends Bloc<RouteEvent, RouteState> {
   RouteBloc() : super(RouteState([])) {
@@ -40,7 +46,10 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
                 })
             .toList();
 
-        await routeLists.add({
+        final String routeId = const Uuid().v4(); // Random ID oluşturur.
+
+        await routeLists.doc(routeId).set({
+          'routeId': routeId,
           'title': event.listTitle,
           'isPrivate': state.isPrivate,
           'createdAt': FieldValue.serverTimestamp(),
@@ -48,6 +57,64 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
         });
       } catch (e) {
         print("Firebase'e kaydetme hatası: $e");
+      }
+    });
+
+    on<LoadRouteOnMap>((event, emit) {
+      final polylineCoords = event.routeData.map((location) {
+        return LatLng(
+          location['latitude'] ?? 0.0,
+          location['longitude'] ?? 0.0,
+        );
+      }).toList();
+
+      emit(state.copyWith(polylineCoordinates: polylineCoords));
+    });
+
+    on<LoadRouteWithCurrentLocation>((event, emit) async {
+      List<LatLng> polylineCoords = [];
+
+      try {
+        // 1. Kullanıcının konumunu al
+        Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high,
+        );
+
+        // 2. Tüm noktaları sırala: Kullanıcı konumu + veritabanından gelenler
+        List<Map<String, dynamic>> fullPoints = [
+          {
+            'latitude': position.latitude,
+            'longitude': position.longitude,
+          },
+          ...event.routePoints,
+        ];
+
+        final apiKey = 'AIzaSyAK2ou9pX-xl-oMaqlgDb8lMx7jW8sMVJI';
+
+        // 3. Nokta çiftleri için rota çiz
+        for (int i = 0; i < fullPoints.length - 1; i++) {
+          final origin = fullPoints[i];
+          final destination = fullPoints[i + 1];
+
+          final url =
+              'https://maps.googleapis.com/maps/api/directions/json?origin=${origin['latitude']},${origin['longitude']}&destination=${destination['latitude']},${destination['longitude']}&key=$apiKey&mode=driving';
+
+          final response = await http.get(Uri.parse(url));
+          final data = jsonDecode(response.body);
+
+          if (data['routes'].isNotEmpty &&
+              data['routes'][0]['overview_polyline'] != null) {
+            final points = data['routes'][0]['overview_polyline']['points'];
+            final decodedPoints = PolylinePoints().decodePolyline(points);
+
+            polylineCoords.addAll(
+                decodedPoints.map((p) => LatLng(p.latitude, p.longitude)));
+          }
+        }
+
+        emit(state.copyWith(polylineCoordinates: polylineCoords));
+      } catch (e) {
+        print("Hata oluştu: $e");
       }
     });
   }

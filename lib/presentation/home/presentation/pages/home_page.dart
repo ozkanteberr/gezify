@@ -18,7 +18,7 @@ import 'package:gezify/presentation/maps/pages/map_screen.dart';
 import 'package:gezify/presentation/tools_page/tools_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/destination/destination_card.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/category/category_selector.dart';
-import 'package:gezify/profile/profile_page.dart';
+import 'package:gezify/presentation/profile/profile_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

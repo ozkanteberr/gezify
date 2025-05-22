@@ -1,32 +1,22 @@
-class RotaListesi {
-  final String listName;
+class RouteList {
   final String id;
-  final List<String> routes;
-  final bool isPrivate;
   final String title;
+  final bool isPrivate;
+  final List<dynamic> routes;
 
-  RotaListesi(
-      {required this.listName,
-      required this.id,
-      required this.routes,
-      required this.isPrivate,
-      required this.title});
+  RouteList({
+    required this.id,
+    required this.title,
+    required this.isPrivate,
+    required this.routes,
+  });
 
-  Map<String, dynamic> toJson() => {
-        'listName': listName,
-        'routes': routes,
-        'isPrivate': isPrivate,
-        'title': title,
-        'id': id
-      };
-
-  factory RotaListesi.fromJson(Map<String, dynamic> json) {
-    return RotaListesi(
-      listName: json['listName'] ?? '',
-      routes: List<String>.from(json['routes'] ?? []),
-      isPrivate: json['isPrivate'] ?? true,
-      title: json['title'] ?? '',
-      id: json['id'] ?? '',
+  factory RouteList.fromMap(Map<String, dynamic> data) {
+    return RouteList(
+      id: data['routeId'] ?? '',
+      title: data['title'] ?? '',
+      isPrivate: data['isPrivate'] ?? false,
+      routes: data['routes'] ?? [],
     );
   }
 }

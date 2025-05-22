@@ -4,6 +4,7 @@ import 'package:gezify/presentation/create_route/bloc/my_routes/my_route_state.d
 import 'package:gezify/presentation/create_route/bloc/my_routes/my_routes_bloc.dart';
 import 'package:gezify/presentation/create_route/bloc/my_routes/my_routes_event.dart';
 import 'package:gezify/presentation/create_route/presentation/my_route_detail_page.dart';
+import 'package:gezify/presentation/create_route/presentation/route_directed.dart';
 
 class MyRoutesPage extends StatelessWidget {
   const MyRoutesPage({super.key});
@@ -103,7 +104,11 @@ class MyRoutesPage extends StatelessWidget {
           const SizedBox(height: 16),
           ElevatedButton.icon(
             onPressed: () {
-              // Rota oluşturma ekranına yönlendirme yapılabilir
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RouteDirected(),
+                  ));
             },
             icon: const Icon(Icons.add),
             label: const Text("Yeni Rota Oluştur"),
