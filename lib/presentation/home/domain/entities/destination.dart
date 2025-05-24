@@ -1,6 +1,7 @@
 class Destination {
   final String title;
   final String adress;
+  final String id;
   final List<String> images;
   final String bannerImage;
   final bool isBestDestination;
@@ -12,6 +13,7 @@ class Destination {
   Destination(
       {required this.title,
       required this.adress,
+      required this.id,
       required this.images,
       required this.bannerImage,
       required this.isBestDestination,
@@ -24,6 +26,7 @@ class Destination {
     return Destination(
       title: map['title'] ?? '',
       adress: map['adress'] ?? '',
+      id: map['id'] ?? '',
       images: List<String>.from(map['detailImages'] ?? []),
       bannerImage: map['bannerImage'] ?? '',
       isBestDestination: map['isBestDestination'] ?? false,

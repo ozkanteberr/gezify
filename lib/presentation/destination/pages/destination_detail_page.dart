@@ -1,5 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gezify/features/user/domain/usecases/get_current_user.dart';
+import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
+import 'package:gezify/presentation/comment/bloc/comment_bloc.dart';
+import 'package:gezify/presentation/comment/bloc/comment_event.dart';
+import 'package:gezify/presentation/comment/bloc/comment_state.dart';
 import 'package:gezify/presentation/create_route/bloc/c_route/route_bloc.dart';
 import 'package:gezify/presentation/create_route/bloc/c_route/route_event.dart';
 import 'package:gezify/presentation/home/domain/entities/destination.dart';
@@ -7,8 +13,7 @@ import 'package:gezify/presentation/maps/pages/map_screen.dart';
 
 class DestinationDetailPage extends StatefulWidget {
   final Destination destination;
-
-  const DestinationDetailPage({Key? key, required this.destination})
+  DestinationDetailPage({Key? key, required this.destination})
       : super(key: key);
 
   @override
@@ -17,6 +22,13 @@ class DestinationDetailPage extends StatefulWidget {
 
 class _DestinationDetailPageState extends State<DestinationDetailPage> {
   final TextEditingController _commentController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final destinationId = widget.destination.id;
+    context.read<CommentBloc>().add(LoadComments(destinationId: destinationId));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,15 +186,26 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 10),
-                  _buildReview(
-                      "Mekan çok güzel, özellikle uçak teması çocuklar için harika!",
-                      "Ahmet K."),
-                  _buildReview(
-                      "Pidesi çok lezzetliydi, çalışanlar da çok güler yüzlü.",
-                      "Elif D."),
-                  _buildReview(
-                      "Gece ışıklandırması etkileyici, tekrar geleceğim.",
-                      "Murat B."),
+                  BlocBuilder<CommentBloc, CommentState>(
+                    builder: (context, state) {
+                      if (state is CommentLoading) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (state is CommentLoaded) {
+                        if (state.comments.isEmpty) {
+                          return Text("Henüz yorum yok.");
+                        }
+                        return Column(
+                          children: state.comments
+                              .map((comment) => _buildReview(
+                                  comment.comment, comment.userName))
+                              .toList(),
+                        );
+                      } else if (state is CommentError) {
+                        return Text("Yorumlar yüklenemedi: ${state.message}");
+                      }
+                      return SizedBox();
+                    },
+                  ),
                   SizedBox(height: 20),
                   Divider(),
 
@@ -219,8 +242,18 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                       ),
                       onPressed: () {
                         final comment = _commentController.text.trim();
+                        final currentUser =
+                            context.read<AuthCubit>().currentUser;
                         if (comment.isNotEmpty) {
-                          print("Yeni yorum: $comment");
+                          context.read<CommentBloc>().add(
+                                AddComment(
+                                  destinationId: widget.destination.id,
+                                  userName: currentUser!.name
+                                      .toString()
+                                      .toUpperCase(),
+                                  comment: comment,
+                                ),
+                              );
                           _commentController.clear();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text("Yorum gönderildi!")),
