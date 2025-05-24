@@ -10,17 +10,16 @@ import 'package:gezify/presentation/create_route/bloc/c_route/route_event.dart';
 import 'package:gezify/presentation/create_route/presentation/route_directed.dart';
 import 'package:gezify/presentation/destination/pages/destination_detail_page.dart';
 import 'package:gezify/presentation/home/presentation/cubits/category/category_state.dart';
-import 'package:gezify/presentation/home/presentation/pages/widgets/auto_scroll_slider.dart';
+import 'package:gezify/presentation/home/presentation/pages/view_all_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/utils.dart';
 import 'package:gezify/presentation/home/presentation/cubits/category/category_bloc.dart';
 import 'package:gezify/presentation/home/presentation/cubits/destination/destination_cubit.dart';
 import 'package:gezify/presentation/home/presentation/cubits/navigation/navigation_cubit.dart';
 import 'package:gezify/presentation/maps/pages/map_screen.dart';
-import 'package:gezify/presentation/profile/profile_page.dart';
 import 'package:gezify/presentation/tools_page/tools_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/destination/destination_card.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/category/category_selector.dart';
-import 'dart:ui';
+import 'package:gezify/presentation/profile/profile_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -32,7 +31,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final authCubit = context.read<AuthCubit>();
   late final navigationCubit = context.read<NavigationCubit>();
-
   @override
   void initState() {
     super.initState();
@@ -65,22 +63,16 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Üst kısım: Profil ve Bildirim
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    CircleAvatar(
-                      radius: 18, // Dairenin boyutu sabit
-                      backgroundColor: Color.fromRGBO(0, 77, 64, 1),
-                      child: ClipOval(
-                        child: Image.asset(
-                          "assets/images/avatar.png",
-                          width: 50, // Resmin boyutunu burada kontrol ediyorsun
-                          height: 50,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                    const CircleAvatar(
+                      radius: 25,
+                      backgroundImage:
+                          AssetImage("assets/images/user-avatar.png"),
                     ),
                     const SizedBox(width: 8),
                     BlocBuilder<AuthCubit, AuthStates>(
@@ -117,20 +109,55 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 20),
 
-            // Yeni Başlık Kutusu
-           const AutoScrollSlider(),
-            const SizedBox(height: 20),
+            // Başlık yazısı
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Güzel dünyayı",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 28,
+                    color: Colors.black,
+                  ),
+                ),
+                RichText(
+                  text: const TextSpan(
+                    style: TextStyle(fontSize: 28),
+                    children: [
+                      TextSpan(
+                        text: "Gezify'la ",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'Keşfet!',
+                        style: TextStyle(
+                          color: Colors.orange,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+
+            // Arama kutusu
             TextField(
-              style: const TextStyle(color: Color.fromARGB(255, 252, 255, 254)),
+              style: const TextStyle(color: Colors.black87),
+              onChanged: (value) {
+                context.read<DestinationCubit>().filterDestinations(value);
+              },
               decoration: InputDecoration(
                 hintText: 'Nereye Gitmek İstersin?',
-                hintStyle:
-                    TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
-                prefixIcon: const Icon(CupertinoIcons.search,
-                    color: Color.fromARGB(255, 255, 255, 255)),
+                prefixIcon: const Icon(CupertinoIcons.search),
                 contentPadding: const EdgeInsets.symmetric(vertical: 16),
                 filled: true,
-                fillColor: Color(0xFF004D40),
+                fillColor: Colors.grey[200],
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide.none,
@@ -166,7 +193,11 @@ class _HomePageState extends State<HomePage> {
               },
             ),
 
+            // Kategori seçici
+
             const SizedBox(height: 20),
+
+            // Best Destination başlık
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -179,13 +210,14 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'View all',
-                    style: TextStyle(
-                      color: Color.fromRGBO(0, 77, 64, 1),
-                    ),
-                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewAllPage(),
+                        ));
+                  },
+                  child: const Text('View all'),
                 )
               ],
             ),
@@ -259,13 +291,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE8F5F2),
+      backgroundColor: Colors.white,
       bottomNavigationBar: BlocBuilder<NavigationCubit, NavigationState>(
         builder: (context, state) {
           return BottomNavigationBar(
-            backgroundColor: Color(0xFF00796B),
-            selectedItemColor: Color.fromARGB(255, 255, 255, 255),
-            unselectedItemColor: const Color.fromARGB(227, 221, 221, 221),
+            selectedItemColor: Colors.blue,
+            unselectedItemColor: Colors.grey,
             items: const [
               BottomNavigationBarItem(
                   icon: Icon(CupertinoIcons.home), label: 'Ana Sayfa'),
@@ -293,4 +324,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-} 
+}

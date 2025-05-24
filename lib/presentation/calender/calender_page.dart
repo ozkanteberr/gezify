@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:intl/intl.dart';
-import 'widgets/week_days_picker.dart';
-import 'widgets/event_list.dart';
-import 'widgets/event_modal.dart';
-import 'widgets/calendar_modal.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({Key? key}) : super(key: key);
@@ -16,45 +11,54 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-  final Map<DateTime, List<String>> _events = {};
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+
+  final Map<DateTime, String> _meetingStatus = {
+    DateTime.utc(2023, 8, 5): 'past',
+    DateTime.utc(2023, 8, 8): 'cancelled',
+    DateTime.utc(2023, 8, 14): 'past',
+    DateTime.utc(2023, 8, 18): 'today',
+    DateTime.utc(2023, 8, 22): 'cancelled',
+    DateTime.utc(2023, 8, 31): 'upcoming',
+  };
+
+  Map<DateTime, List<String>> _events = {};
   final TextEditingController _eventController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _selectedDay = DateTime.now();
-  }
-
-  void _handleEventCreated(String event, DateTime start, DateTime end) {
-    DateTime current = start;
-    while (!current.isAfter(end)) {
-      final key = DateTime.utc(current.year, current.month, current.day);
-      setState(() {
-        _events[key] = [..._events[key] ?? [], event];
-      });
-      current = current.add(const Duration(days: 1));
-    }
-  }
-
-  void _openCalendarModal() {
-    showModalBottomSheet(
+  void _addEventDialog(DateTime date) {
+    showDialog(
       context: context,
-      backgroundColor: const Color(0xFFF1F9F9), // Hafif yeşilimsi beyaz
-      builder: (_) => CalendarModal(
-        initialDate: _focusedDay,
-        onPageChanged: (day) => setState(() => _focusedDay = day),
-      ),
-    );
-  }
-
-  void _openEventModal() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: const Color.fromARGB(255, 0, 0, 0), // Hafif yeşilimsi beyaz
-      builder: (_) => EventModal(
-        controller: _eventController,
-        onSave: _handleEventCreated,
+      builder: (context) => AlertDialog(
+        title: const Text("Etkinlik Ekle"),
+        content: TextField(
+          controller: _eventController,
+          decoration: const InputDecoration(hintText: "Etkinlik adı girin"),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _eventController.clear();
+            },
+            child: const Text("İptal"),
+          ),
+          TextButton(
+            onPressed: () {
+              if (_eventController.text.isEmpty) return;
+              setState(() {
+                final selected = DateTime.utc(date.year, date.month, date.day);
+                if (_events[selected] != null) {
+                  _events[selected]!.add(_eventController.text);
+                } else {
+                  _events[selected] = [_eventController.text];
+                }
+              });
+              _eventController.clear();
+              Navigator.pop(context);
+            },
+            child: const Text("Ekle"),
+          ),
+        ],
       ),
     );
   }
@@ -62,42 +66,158 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE0F2F1), // Açık arka plan
+      backgroundColor: const Color(0xFFEDEAFF),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
-          "Etkinlik ve Takvim Sayfam",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF004D40), // Koyu yeşil başlık
-            fontSize: 20,
-          ),
-        ),
+        title: const Text("Check my Calendar", style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
-            icon: const Icon(Icons.calendar_today_outlined, color: Color(0xFF007965)), // Tema yeşili
-            onPressed: _openCalendarModal,
-          ),
+            onPressed: () {},
+            icon: const Icon(Icons.calendar_today_outlined),
+          )
         ],
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildMonthHeader(),
           const SizedBox(height: 10),
-          WeekDaysPicker(
+          TableCalendar(
+            firstDay: DateTime.utc(2020, 1, 1),
+            lastDay: DateTime.utc(2030, 12, 31),
             focusedDay: _focusedDay,
-            selectedDay: _selectedDay,
-            onDaySelected: (day) => setState(() => _selectedDay = day),
+            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+            onDaySelected: (selectedDay, focusedDay) {
+              setState(() {
+                _selectedDay = selectedDay;
+                _focusedDay = focusedDay;
+              });
+            },
+            calendarFormat: _calendarFormat,
+            onFormatChanged: (format) {
+              setState(() {
+                _calendarFormat = format;
+              });
+            },
+            calendarStyle: CalendarStyle(
+              defaultDecoration: const BoxDecoration(shape: BoxShape.circle),
+              todayDecoration: BoxDecoration(
+                color: Colors.blue.shade700,
+                shape: BoxShape.circle,
+              ),
+              selectedDecoration: const BoxDecoration(
+                color: Colors.orange,
+                shape: BoxShape.circle,
+              ),
+              markerDecoration: const BoxDecoration(
+                color: Colors.black,
+                shape: BoxShape.circle,
+              ),
+              outsideDaysVisible: true,
+            ),
+            headerStyle: HeaderStyle(
+              formatButtonVisible: true,
+              formatButtonDecoration: BoxDecoration(
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              formatButtonTextStyle: const TextStyle(color: Colors.white),
+              titleCentered: true,
+              titleTextStyle: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+              leftChevronVisible: true,
+              rightChevronVisible: true,
+              leftChevronIcon: const Icon(Icons.chevron_left, color: Colors.black),
+              rightChevronIcon: const Icon(Icons.chevron_right, color: Colors.black),
+            ),
+            availableCalendarFormats: const {
+              CalendarFormat.month: 'Month',
+            },
+            daysOfWeekStyle: const DaysOfWeekStyle(
+              weekendStyle: TextStyle(color: Colors.red),
+            ),
+            calendarBuilders: CalendarBuilders(
+              defaultBuilder: (context, day, focusedDay) {
+                final status = _meetingStatus[DateTime.utc(day.year, day.month, day.day)];
+                Color? bgColor;
+
+                switch (status) {
+                  case 'today':
+                    bgColor = Colors.blue.shade700;
+                    break;
+                  case 'past':
+                    bgColor = Colors.purple.shade200;
+                    break;
+                  case 'cancelled':
+                    bgColor = Colors.pink.shade100;
+                    break;
+                  case 'upcoming':
+                    bgColor = Colors.orange.shade100;
+                    break;
+                  default:
+                    bgColor = null;
+                }
+
+                return Container(
+                  margin: const EdgeInsets.all(6.0),
+                  decoration: BoxDecoration(
+                    color: bgColor,
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    '${day.day}',
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                );
+              },
+            ),
           ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: EventList(
-              events: _events,
-              selectedDay: _selectedDay ?? _focusedDay,
-              onAddPressed: _openEventModal,
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Wrap(
+              spacing: 20,
+              runSpacing: 10,
+              children: [
+                _buildLegend(Colors.blue.shade700, "Today's Date"),
+                _buildLegend(Colors.pink.shade100, "Cancelled Meetings"),
+                _buildLegend(Colors.purple.shade200, "Past Meetings"),
+                _buildLegend(Colors.orange.shade100, "Upcoming Meetings"),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          if (_selectedDay != null && _events[DateTime.utc(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day)] != null)
+            ..._events[DateTime.utc(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day)]!.map((event) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 20.0),
+              child: Row(
+                children: [
+                  const Icon(Icons.check_circle_outline, size: 18, color: Colors.green),
+                  const SizedBox(width: 8),
+                  Expanded(child: Text(event)),
+                ],
+              ),
+            )),
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25)),
+              ),
+              onPressed: () {
+                if (_selectedDay != null) {
+                  _addEventDialog(_selectedDay!);
+                }
+              },
+              child: const Text("Etkinlik Ekle", style: TextStyle(fontSize: 16)),
             ),
           ),
         ],
@@ -105,30 +225,14 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  Widget _buildMonthHeader() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            DateFormat.MMMM('tr_TR').format(_focusedDay).toUpperCase(),
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF004D40), // Koyu yeşil
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            DateFormat('dd MMMM yyyy', 'tr_TR').format(DateTime.now()),
-            style: const TextStyle(
-              fontSize: 16,
-              color: Color(0xFF007965), // Tema yeşili
-            ),
-          ),
-        ],
-      ),
+  Widget _buildLegend(Color color, String label) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CircleAvatar(backgroundColor: color, radius: 6),
+        const SizedBox(width: 6),
+        Text(label),
+      ],
     );
   }
 }
