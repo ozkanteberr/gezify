@@ -20,6 +20,7 @@ class DestinationRepository {
       final snapshot = await firestore
           .collection('destination')
           .where('categoryList', arrayContains: category)
+          .where('isBestDestination', isEqualTo: true)
           .get();
 
       return snapshot.docs

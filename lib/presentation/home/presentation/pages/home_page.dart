@@ -10,6 +10,7 @@ import 'package:gezify/presentation/create_route/bloc/c_route/route_event.dart';
 import 'package:gezify/presentation/create_route/presentation/route_directed.dart';
 import 'package:gezify/presentation/destination/pages/destination_detail_page.dart';
 import 'package:gezify/presentation/home/presentation/cubits/category/category_state.dart';
+import 'package:gezify/presentation/home/presentation/pages/view_all_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/utils.dart';
 import 'package:gezify/presentation/home/presentation/cubits/category/category_bloc.dart';
 import 'package:gezify/presentation/home/presentation/cubits/destination/destination_cubit.dart';
@@ -209,7 +210,13 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewAllPage(),
+                        ));
+                  },
                   child: const Text('View all'),
                 )
               ],
