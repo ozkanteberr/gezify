@@ -100,6 +100,9 @@ class _RouteViewState extends State<RouteView> {
                       onChanged: (value) {
                         setState(() {
                           _isPrivate = !value;
+                          context
+                              .read<RouteBloc>()
+                              .add(TogglePrivacy(!_isPrivate));
                         });
                       },
                     ),

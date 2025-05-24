@@ -7,9 +7,11 @@ class DestinationInitial extends DestinationState {}
 class DestinationLoading extends DestinationState {}
 
 class DestinationLoaded extends DestinationState {
-  final List<Destination> destinations;
+  final List<Destination> allDestinations;
+  final List<Destination> filteredDestinations;
 
-  DestinationLoaded(this.destinations);
+  DestinationLoaded(this.allDestinations, {List<Destination>? filtered})
+      : filteredDestinations = filtered ?? allDestinations;
 }
 
 class DestinationSelected extends DestinationState {

@@ -13,7 +13,7 @@ class CategorySelector extends StatefulWidget {
     Key? key,
     required this.categories,
     this.onSelected,
-    this.selectedColor = Colors.black,
+    this.selectedColor = const Color(0xFF004D40),
     this.unselectedColor = Colors.grey,
     this.itemRadius = 20,
     this.itemPadding = const EdgeInsets.symmetric(horizontal: 14, vertical: 8),

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
 import 'package:gezify/presentation/auth/presentation/pages/sign_in.dart';
-import 'package:gezify/profile/FAQ.dart';
-import 'package:gezify/profile/personal_details_page.dart';
-import 'package:gezify/profile/bloc/profile_bloc.dart';
-import 'package:gezify/profile/bloc/profile_event.dart';
-import 'package:gezify/profile/bloc/profile_state.dart';
-import 'package:gezify/profile/settings.dart';
+import 'package:gezify/presentation/profile/FAQ.dart';
+import 'package:gezify/presentation/profile/personal_details_page.dart';
+import 'package:gezify/presentation/profile/bloc/profile_bloc.dart';
+import 'package:gezify/presentation/profile/bloc/profile_event.dart';
+import 'package:gezify/presentation/profile/bloc/profile_state.dart';
+import 'package:gezify/presentation/profile/settings.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});

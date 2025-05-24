@@ -20,7 +20,7 @@ class GoogleMapScreen extends StatefulWidget {
 class _GoogleMapScreenState extends State<GoogleMapScreen> {
   GoogleMapController? _mapController;
   LatLng _initialPosition =
-      const LatLng(41.015137, 28.979530); // Default İstanbul
+      const LatLng(41.002697, 39.716763); // Default Trabzon
   bool _locationLoaded = false;
 
   @override
@@ -55,7 +55,9 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
     final destination = widget.destination;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Google Harita")),
+      appBar: AppBar(
+        title: const Text("Google Harita"),
+      ),
       body: _locationLoaded
           ? Stack(
               children: [

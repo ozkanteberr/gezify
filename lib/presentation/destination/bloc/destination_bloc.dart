@@ -19,6 +19,7 @@ class DestinationBloc extends Bloc<DestinationEvent, DestinationState> {
           return Destination(
             title: data['title'],
             adress: data['adress'],
+            id: data['id'],
             bannerImage: data['bannerImage'],
             description: data['description'] ,
             categoryList: List<String>.from(data['categoryList'] ?? []),

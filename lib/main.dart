@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:gezify/firebase_options.dart';
+import 'package:gezify/presentation/comment/bloc/comment_bloc.dart';
+import 'package:gezify/presentation/comment/data/comment_repo.dart';
 import 'package:gezify/presentation/home/data/category_repository.dart';
 import 'package:gezify/presentation/home/presentation/cubits/category/category_bloc.dart';
 import 'package:gezify/presentation/maps/bloc/map_screen_cubit.dart';
@@ -11,7 +14,6 @@ import 'package:gezify/presentation/splash/pages/splash.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:gezify/presentation/auth/data/firebase_auth_repo.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
-import 'package:gezify/presentation/auth/presentation/cubits/auth_states.dart';
 import 'package:gezify/presentation/auth/presentation/pages/auth_page.dart';
 import 'package:gezify/presentation/home/data/destination_repository.dart';
 import 'package:gezify/presentation/home/presentation/cubits/destination/destination_cubit.dart';
@@ -26,6 +28,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await initializeDateFormatting('tr', null);
+  await Geolocator.requestPermission();
   runApp(const MyApp());
 }
 
@@ -57,17 +60,20 @@ class MyApp extends StatelessWidget {
         BlocProvider<GoogleMapCubit>(
           create: (_) => GoogleMapCubit(),
         ),
+        BlocProvider(
+          create: (_) => CommentBloc(commentRepository: CommentRepository()),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: const SplashPage(),
         routes: {
-    '/home': (context) => const HomePage(),
-    '/auth': (context) => const AuthPage(),
-    '/splash': (context) => const SplashPage(),
-    // varsa onboarding ekle:
-    '/onboarding': (context) => const OnboardingPage(),
-  },
+          '/home': (context) => const HomePage(),
+          '/auth': (context) => const AuthPage(),
+          '/splash': (context) => const SplashPage(),
+          // varsa onboarding ekle:
+          '/onboarding': (context) => const OnboardingPage(),
+        },
       ),
     );
   }

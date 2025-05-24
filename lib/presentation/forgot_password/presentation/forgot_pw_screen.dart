@@ -26,90 +26,112 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF1F9F9),
       appBar: AppBar(
-        title: Text("Şifremi Sıfırla"),
+        title: const Text(
+          "Şifremi Sıfırla",
+          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+        ),
+        backgroundColor: const Color(0xFF004D40),
         centerTitle: true,
+        elevation: 1,
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 255, 255, 255)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
-            listener: (context, state) {
-          if (state.isSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Sıfırlama maili gönderildi!')),
-            );
-            _emailController.clear();
-          } else if (state.isFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text(
-                      'Bir hata oluştu. Lütfen geçerli bir e-posta girin.')),
-            );
-          }
-        }, builder: (context, state) {
-          return SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 130),
-                Image.asset('assets/images/sendmail.png'),
-                SizedBox(height: 40),
-                TextField(
-                  controller: _emailController,
-                  onChanged: (value) {
-                    context.read<ForgotPasswordBloc>().add(EmailChanged(value));
-                    setState(() => _errorText = null);
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email_outlined),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    errorText: _errorText,
-                  ),
+          listener: (context, state) {
+            if (state.isSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Sıfırlama maili gönderildi!'),
+                  backgroundColor: Color.fromRGBO(0, 77, 64, 1),
                 ),
-                SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: state.isSubmitting
-                        ? null
-                        : () {
-                            final email = _emailController.text.trim();
-                            if (email.isEmpty) {
-                              setState(() {
-                                _errorText =
-                                    "Lütfen e-posta adresinizi giriniz";
-                              });
-                              return;
-                            }
-                            context
-                                .read<ForgotPasswordBloc>()
-                                .add(SubmitEmail());
-                          },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      backgroundColor: Colors.blue,
-                      minimumSize: const Size(double.infinity, 50),
+              );
+              _emailController.clear();
+            } else if (state.isFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content:
+                      Text('Bir hata oluştu. Lütfen geçerli bir e-posta girin.'),
+                  backgroundColor: Colors.redAccent,
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 100),
+                  Image.asset(
+                    'assets/images/sendmail.png',
+                    height: 180,
+                  ),
+                  const SizedBox(height: 40),
+                  TextField(
+                    controller: _emailController,
+                    onChanged: (value) {
+                      context.read<ForgotPasswordBloc>().add(EmailChanged(value));
+                      setState(() => _errorText = null);
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'E-posta adresi',
+                      labelStyle: const TextStyle(color: Color.fromRGBO(0, 77, 64, 1),),
+                      prefixIcon: const Icon(Icons.email_outlined, color: Color.fromRGBO(0, 77, 64, 1)),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Color(0xFFB2DFDB)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Color.fromRGBO(0, 77, 64, 1), width: 2),
+                      ),
+                      errorText: _errorText,
                     ),
-                    child: state.isSubmitting
-                        ? CircularProgressIndicator(color: Colors.white)
-                        : Text(
-                            "Gönder",
-                            style: TextStyle(
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: state.isSubmitting
+                          ? null
+                          : () {
+                              final email = _emailController.text.trim();
+                              if (email.isEmpty) {
+                                setState(() {
+                                  _errorText = "Lütfen e-posta adresinizi giriniz";
+                                });
+                                return;
+                              }
+                              context.read<ForgotPasswordBloc>().add(SubmitEmail());
+                            },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        backgroundColor: const Color.fromRGBO(0, 77, 64, 1),
+                        minimumSize: const Size(double.infinity, 50),
+                      ),
+                      child: state.isSubmitting
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text(
+                              "Gönder",
+                              style: TextStyle(
                                 color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
-        }),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

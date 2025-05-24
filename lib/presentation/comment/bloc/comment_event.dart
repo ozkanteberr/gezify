@@ -1,14 +1,32 @@
-import 'package:gezify/domain/entities/comment.dart';
+import 'package:equatable/equatable.dart';
 
+abstract class CommentEvent extends Equatable {
+  const CommentEvent();
 
-abstract class CommentEvent {}
+  @override
+  List<Object?> get props => [];
+}
 
 class LoadComments extends CommentEvent {
   final String destinationId;
-  LoadComments(this.destinationId);
+
+  const LoadComments({required this.destinationId});
+
+  @override
+  List<Object?> get props => [destinationId];
 }
 
-class AddNewComment extends CommentEvent {
-  final Comment comment;
-  AddNewComment(this.comment);
+class AddComment extends CommentEvent {
+  final String destinationId;
+  final String userName;
+  final String comment;
+
+  const AddComment({
+    required this.destinationId,
+    required this.userName,
+    required this.comment,
+  });
+
+  @override
+  List<Object?> get props => [destinationId, userName, comment];
 }

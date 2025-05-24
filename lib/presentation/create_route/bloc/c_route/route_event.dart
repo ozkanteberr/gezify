@@ -27,4 +27,16 @@ class SaveDestinationsToFirebase extends RouteEvent {
   });
 }
 
+class LoadRouteOnMap extends RouteEvent {
+  final List<Map<String, dynamic>> routeData;
+
+  LoadRouteOnMap(this.routeData);
+}
+
+class LoadRouteWithCurrentLocation extends RouteEvent {
+  final List<Map<String, dynamic>> routePoints;
+
+  LoadRouteWithCurrentLocation(this.routePoints);
+}
+
 class ClearDestinations extends RouteEvent {}

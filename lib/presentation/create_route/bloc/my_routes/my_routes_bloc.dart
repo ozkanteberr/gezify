@@ -1,79 +1,56 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:gezify/presentation/create_route/bloc/my_routes/my_route_state.dart';
-import 'package:gezify/presentation/create_route/bloc/my_routes/my_routes_event.dart';
 import 'package:gezify/presentation/create_route/data/route_model.dart';
 
+import 'my_routes_event.dart';
+import 'my_route_state.dart';
+
 class MyRoutesBloc extends Bloc<MyRoutesEvent, MyRoutesState> {
-  MyRoutesBloc() : super(MyRoutesInitial()) {
-    on<FetchMyRoutes>((event, emit) async {
-      emit(MyRoutesLoading());
+  MyRoutesBloc() : super(MyRoutesLoading()) {
+    on<FetchMyRoutes>(_onFetchMyRoutes);
+    on<DeleteRoute>(_onDeleteRoute);
+  }
 
-      try {
-        final user = FirebaseAuth.instance.currentUser;
+  Future<void> _onFetchMyRoutes(
+      FetchMyRoutes event, Emitter<MyRoutesState> emit) async {
+    emit(MyRoutesLoading());
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) throw Exception("Kullanıcı oturumu açık değil.");
 
-        if (user == null) {
-          emit(MyRoutesError("Kullanıcı oturumu bulunamadı."));
-          return;
-        }
+      final snapshot = await FirebaseFirestore.instance
+          .collection('userRoutes')
+          .doc(user.uid)
+          .collection('routeLists')
+          .get();
 
-        final firestore = FirebaseFirestore.instance;
-        final snapshot = await firestore
-            .collection('userRoutes')
-            .doc(user.uid)
-            .collection('routeLists')
-            .orderBy('createdAt', descending: true)
-            .get();
+      final routeLists = snapshot.docs.map((doc) {
+        return RouteList.fromMap(doc.data());
+      }).toList();
 
-        final routes = snapshot.docs.map((doc) {
-          return RotaListesi.fromJson(doc.data());
-        }).toList();
+      emit(MyRoutesLoaded(routeLists));
+    } catch (e) {
+      emit(MyRoutesError("Rotalar yüklenemedi: ${e.toString()}"));
+    }
+  }
 
-        emit(MyRoutesLoaded(routes));
-      } catch (e) {
-        emit(MyRoutesError('Rotalar yüklenirken hata oluştu: $e'));
-      }
-    });
+  Future<void> _onDeleteRoute(
+      DeleteRoute event, Emitter<MyRoutesState> emit) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) throw Exception("Kullanıcı oturumu açık değil.");
 
-    on<DeleteRoute>((event, emit) async {
-      try {
-        emit(MyRoutesLoading());
+      await FirebaseFirestore.instance
+          .collection('userRoutes')
+          .doc(user.uid)
+          .collection('routeLists')
+          .doc(event.routeId)
+          .delete();
 
-        final user = FirebaseAuth.instance.currentUser;
-        if (user == null) throw Exception("Kullanıcı oturumu bulunamadı.");
-
-        final docRef = FirebaseFirestore.instance
-            .collection('userRoutes')
-            .doc(user.uid)
-            .collection('routeLists')
-            .doc(event.routeId);
-
-        await docRef.delete();
-
-        // Güncel rotaları tekrar çek
-        final querySnapshot = await FirebaseFirestore.instance
-            .collection('userRoutes')
-            .doc(user.uid)
-            .collection('routeLists')
-            .orderBy('createdAt', descending: true)
-            .get();
-
-        final routes = querySnapshot.docs.map((doc) {
-          final data = doc.data();
-          return RotaListesi(
-            listName: '',
-            id: doc.id,
-            title: data['title'] ?? '',
-            routes: List<String>.from(data['routes'] ?? []),
-            isPrivate: data['isPrivate'] ?? true,
-          );
-        }).toList();
-
-        emit(MyRoutesLoaded(routes));
-      } catch (e) {
-        emit(MyRoutesError("Silme işlemi başarısız: ${e.toString()}"));
-      }
-    });
+      add(FetchMyRoutes()); // Silme sonrası tekrar listele
+    } catch (e) {
+      emit(MyRoutesError("Silme işlemi başarısız: ${e.toString()}"));
+    }
   }
 }

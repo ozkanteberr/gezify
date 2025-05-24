@@ -7,7 +7,7 @@ class MyRoutesInitial extends MyRoutesState {}
 class MyRoutesLoading extends MyRoutesState {}
 
 class MyRoutesLoaded extends MyRoutesState {
-  final List<RotaListesi> routeLists;
+  final List<RouteList> routeLists;
   MyRoutesLoaded(this.routeLists);
 }
 
