@@ -148,6 +148,9 @@ class _HomePageState extends State<HomePage> {
             // Arama kutusu
             TextField(
               style: const TextStyle(color: Colors.black87),
+              onChanged: (value) {
+                context.read<DestinationCubit>().filterDestinations(value);
+              },
               decoration: InputDecoration(
                 hintText: 'Nereye Gitmek İstersin?',
                 prefixIcon: const Icon(CupertinoIcons.search),
@@ -218,7 +221,13 @@ class _HomePageState extends State<HomePage> {
                 if (state is DestinationLoading) {
                   return Center(child: CircularProgressIndicator());
                 } else if (state is DestinationLoaded) {
-                  final destinations = state.destinations;
+                  final destinations =
+                      state.filteredDestinations; // filtrelenmiş veriyi al
+
+                  if (destinations.isEmpty) {
+                    return Center(child: Text("Hiçbir sonuç bulunamadı."));
+                  }
+
                   return ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),

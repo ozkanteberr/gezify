@@ -30,6 +30,21 @@ class DestinationCubit extends Cubit<DestinationState> {
     }
   }
 
+  void filterDestinations(String query) {
+    final currentState = state;
+    if (currentState is DestinationLoaded) {
+      final filtered = currentState.allDestinations.where((destination) {
+        return destination.title.toLowerCase().contains(query.toLowerCase()) ||
+            destination.adress.toLowerCase().contains(query.toLowerCase());
+      }).toList();
+
+      emit(DestinationLoaded(
+        currentState.allDestinations,
+        filtered: filtered,
+      ));
+    }
+  }
+
   void selectDestination(Destination destination) {
     emit(DestinationSelected(destination));
   }
