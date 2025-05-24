@@ -2,6 +2,7 @@ class Destination {
   final String title;
   final String adress;
   final String id;
+  final String ? description;
   final List<String> images;
   final String bannerImage;
   final bool isBestDestination;
@@ -11,7 +12,9 @@ class Destination {
   final List<String> categoryList;
 
   Destination(
-      {required this.title,
+      {
+      this.description="",  
+      required this.title,
       required this.adress,
       required this.id,
       required this.images,
@@ -27,6 +30,7 @@ class Destination {
       title: map['title'] ?? '',
       adress: map['adress'] ?? '',
       id: map['id'] ?? '',
+      description: map['description'] ?? '',
       images: List<String>.from(map['detailImages'] ?? []),
       bannerImage: map['bannerImage'] ?? '',
       isBestDestination: map['isBestDestination'] ?? false,
