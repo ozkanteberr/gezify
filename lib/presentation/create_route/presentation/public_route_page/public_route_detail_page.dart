@@ -2,35 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:gezify/presentation/create_route/data/route_model.dart';
 import 'package:gezify/presentation/create_route/presentation/line_route.dart';
 
-class RouteDetailPage extends StatelessWidget {
+class PublicRouteDetailPage extends StatelessWidget {
   final RouteList routeList;
 
-  const RouteDetailPage({super.key, required this.routeList});
+  const PublicRouteDetailPage({super.key, required this.routeList});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Rotalarım')),
+      appBar: AppBar(title: const Text('Rota Detayı')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "🔖 ${routeList.title}",
+              " ${routeList.title}".toUpperCase(),
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Text(
-              "🔒 Gizlilik: ${routeList.isPrivate ? 'Özel' : 'Herkese Açık'}",
+              "🔒 Gizlilik: Herkese Açık",
               style: TextStyle(
-                color: routeList.isPrivate ? Colors.red : Colors.green,
+                color: Colors.green,
                 fontWeight: FontWeight.w500,
               ),
             ),
             const SizedBox(height: 20),
             const Text(
-              "📍 Rotalar:",
+              "🗺️⁀✈︎  Rotalar:",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 8),
@@ -43,16 +43,17 @@ class RouteDetailPage extends StatelessWidget {
                         final item = routeList.routes[index];
 
                         if (item is String) {
-                          // Sadece başlık varsa
                           return ListTile(
-                            leading: const Icon(Icons.location_on),
+                            leading: Text('╰┈➤'),
                             title: Text(item),
                           );
                         } else if (item is Map<String, dynamic>) {
-                          // Rota objesi varsa
                           return ListTile(
-                            leading: const Icon(Icons.location_on),
-                            title: Text(item['title'] ?? 'Bilinmeyen Konum'),
+                            leading: Text('╰┈➤'),
+                            title: Text(
+                              item['title'] ?? 'Bilinmeyen Konum',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           );
                         } else {
                           return const SizedBox.shrink();
@@ -69,7 +70,7 @@ class RouteDetailPage extends StatelessWidget {
                             LineRoutePage(routeData: routeList.routes),
                       ));
                 },
-                child: Text("Map"))
+                child: const Text("Haritada Görüntüle"))
           ],
         ),
       ),

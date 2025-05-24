@@ -28,10 +28,6 @@ class _LineRoutePageState extends State<LineRoutePage> {
         .toList();
 
     context.read<RouteBloc>().add(LoadRouteOnMap(filtered));
-    // context.read<RouteBloc>().add(
-    //       LoadRouteWithCurrentLocation(
-    //           widget.routeData.cast<Map<String, dynamic>>()),
-    //     );
   }
 
   @override

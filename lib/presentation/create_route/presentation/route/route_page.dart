@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gezify/presentation/create_route/bloc/c_route/route_bloc.dart';
 import 'package:gezify/presentation/create_route/bloc/c_route/route_event.dart';
 import 'package:gezify/presentation/create_route/bloc/c_route/route_state.dart';
-import 'package:gezify/presentation/create_route/presentation/route_detail.dart';
+import 'package:gezify/presentation/create_route/presentation/route/route_detail.dart';
 
 class RoutePage extends StatelessWidget {
   const RoutePage({super.key});
@@ -96,13 +96,11 @@ class _RouteViewState extends State<RouteView> {
                     const Text("Herkese Açık mı?"),
                     const SizedBox(width: 10),
                     Switch(
-                      value: !_isPrivate,
+                      value: !_isPrivate, //true(value)
                       onChanged: (value) {
                         setState(() {
                           _isPrivate = !value;
-                          context
-                              .read<RouteBloc>()
-                              .add(TogglePrivacy(!_isPrivate));
+                          context.read<RouteBloc>().add(TogglePrivacy(!value));
                         });
                       },
                     ),

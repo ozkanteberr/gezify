@@ -48,13 +48,28 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
 
         final String routeId = const Uuid().v4(); // Random ID oluşturur.
 
-        await routeLists.doc(routeId).set({
+        final routeData = {
           'routeId': routeId,
           'title': event.listTitle,
           'isPrivate': state.isPrivate,
           'createdAt': FieldValue.serverTimestamp(),
           'routes': destinationsMap,
-        });
+        };
+
+        final publicData = {
+          'routeId': routeId,
+          'title': event.listTitle,
+          'routes': destinationsMap,
+        };
+
+        await routeLists.doc(routeId).set(routeData);
+
+        if (!state.isPrivate) {
+          await firestore
+              .collection('publicUserRoutes')
+              .doc(routeId)
+              .set(publicData);
+        }
       } catch (e) {
         print("Firebase'e kaydetme hatası: $e");
       }

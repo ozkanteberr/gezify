@@ -1,7 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:gezify/presentation/create_route/presentation/my_routes.dart';
-import 'package:gezify/presentation/create_route/presentation/route_page.dart';
+import 'package:gezify/presentation/create_route/presentation/public_route_page/public_route_page.dart';
+import 'package:gezify/presentation/create_route/presentation/route/route_page.dart';
+import 'package:gezify/presentation/create_route/presentation/save_route_page/save_route_page.dart';
 
 class RouteDirected extends StatelessWidget {
   const RouteDirected({super.key});
@@ -46,14 +48,26 @@ class RouteDirected extends StatelessWidget {
                 context,
                 icon: Icons.favorite_border,
                 title: "Herkese Açık Rotalar",
-                onTap: () => print("Favori Rotalar"),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PublicRouteListPage(),
+                      ));
+                },
               ),
               const SizedBox(height: 25),
               _glassButton(
                 context,
                 icon: Icons.save_rounded,
                 title: "Kaydedilen Rotalar",
-                onTap: () => print("İste Rotalarım"),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SaveRouteListPage(),
+                      ));
+                },
               ),
               const SizedBox(height: 25),
               _glassButton(
