@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gezify/presentation/create_route/bloc/c_route/route_bloc.dart';
+import 'package:gezify/presentation/create_route/bloc/c_route/route_event.dart';
 import 'package:gezify/presentation/home/domain/entities/destination.dart';
 import 'package:gezify/presentation/maps/pages/map_screen.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
 import 'package:gezify/presentation/comment/bloc/comment_bloc.dart';
 import 'package:gezify/presentation/comment/bloc/comment_event.dart';
 import 'package:gezify/presentation/comment/bloc/comment_state.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+const Color primaryGreen = Color(0xFF00796B);
 
 class DestinationDetailPage extends StatefulWidget {
   final Destination destination;
@@ -94,7 +99,9 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                           color: Colors.white,
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          shadows: [Shadow(color: Colors.black54, blurRadius: 4)],
+                          shadows: [
+                            Shadow(color: Colors.black54, blurRadius: 4)
+                          ],
                         ),
                       ),
                       const SizedBox(height: 6),
@@ -112,8 +119,7 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          const Icon(Icons.star,
-                              color: Colors.amber, size: 18),
+                          const Icon(Icons.star, color: Colors.amber, size: 18),
                           const SizedBox(width: 4),
                           Text("${destination.rating}",
                               style: const TextStyle(color: Colors.white)),
@@ -136,8 +142,9 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                           destination.description ?? "Açıklama bulunamadı.",
-                          style: TextStyle(fontSize: 16, color: Colors.grey[800]),
+                          destination.description ?? "Açıklama bulunamadı.",
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.grey[800]),
                         ),
                       ),
                     ],
@@ -184,10 +191,16 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                             ),
                           ),
                           onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content:
-                                      Text("${destination.title} rotanıza eklendi!")),
+                            context
+                                .read<RouteBloc>()
+                                .add(AddDestinationToRoute(destination));
+                            Fluttertoast.showToast(
+                              msg: "Rotanıza eklendi!",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              backgroundColor: primaryGreen,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
                             );
                           },
                           icon: const Icon(Icons.add_location_alt,

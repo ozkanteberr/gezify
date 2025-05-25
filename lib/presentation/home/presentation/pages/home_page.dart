@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_states.dart';
 import 'package:gezify/presentation/auth/presentation/pages/sign_in.dart';
@@ -79,8 +80,7 @@ class _HomePageState extends State<HomePage> {
                     const CircleAvatar(
                       radius: 18,
                       backgroundColor: deepGreen,
-                      backgroundImage:
-                          AssetImage("assets/images/avatar.png"),
+                      backgroundImage: AssetImage("assets/images/avatar.png"),
                     ),
                     const SizedBox(width: 8),
                     BlocBuilder<AuthCubit, AuthStates>(
@@ -193,8 +193,7 @@ class _HomePageState extends State<HomePage> {
                 if (state is DestinationLoading) {
                   return Center(child: CircularProgressIndicator());
                 } else if (state is DestinationLoaded) {
-                  final destinations =
-                      state.filteredDestinations;
+                  final destinations = state.filteredDestinations;
 
                   if (destinations.isEmpty) {
                     return Center(child: Text("Hiçbir sonuç bulunamadı."));
@@ -224,6 +223,14 @@ class _HomePageState extends State<HomePage> {
                           context
                               .read<RouteBloc>()
                               .add(AddDestinationToRoute(destination));
+                          Fluttertoast.showToast(
+                            msg: "Rotanıza eklendi!",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: primaryGreen,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
                         },
                         onShowOnMapPressed: () {
                           context

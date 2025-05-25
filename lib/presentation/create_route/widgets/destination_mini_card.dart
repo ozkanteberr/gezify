@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gezify/presentation/create_route/bloc/c_route/route_bloc.dart';
 import 'package:gezify/presentation/create_route/bloc/c_route/route_event.dart';
 import 'package:gezify/presentation/destination/pages/destination_detail_page.dart';
@@ -105,6 +106,14 @@ class DestinationMiniCard extends StatelessWidget {
                               context
                                   .read<RouteBloc>()
                                   .add(AddDestinationToRoute(destination));
+                              Fluttertoast.showToast(
+                                msg: "Rotanıza eklendi!",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                backgroundColor: primaryGreen,
+                                textColor: Colors.white,
+                                fontSize: 16.0,
+                              );
                             },
                             child: const Icon(Icons.add, color: Colors.white),
                           ),

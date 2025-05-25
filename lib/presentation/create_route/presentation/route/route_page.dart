@@ -5,7 +5,6 @@ import 'package:gezify/presentation/create_route/bloc/c_route/route_bloc.dart';
 import 'package:gezify/presentation/create_route/bloc/c_route/route_event.dart';
 import 'package:gezify/presentation/create_route/bloc/c_route/route_state.dart';
 import 'package:gezify/presentation/create_route/presentation/route/route_detail.dart';
-import 'package:gezify/presentation/home/presentation/pages/home_page.dart';
 
 class RoutePage extends StatelessWidget {
   const RoutePage({super.key});
@@ -57,26 +56,24 @@ class _RouteViewState extends State<RouteView> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-                      content: Text(
-                        'Rota Listesi Kaydedildi...',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      backgroundColor: Color(0xFF004D40),
-                      duration: Duration(seconds: 2),
-                    ),
-        
-        
+          content: Text(
+            'Rota Listesi Kaydedildi...',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Color(0xFF004D40),
+          duration: Duration(seconds: 2),
+        ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-                      content: Text(
-                        'Lütfen başlık girin...',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      backgroundColor: Color(0xFF004D40),
-                      duration: Duration(seconds: 2),
-                    ),
+          content: Text(
+            'Lütfen başlık girin...',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Color(0xFF004D40),
+          duration: Duration(seconds: 2),
+        ),
       );
     }
   }
@@ -86,11 +83,11 @@ class _RouteViewState extends State<RouteView> {
     return Scaffold(
       backgroundColor: Color(0xFFE8F5F2),
       appBar: AppBar(
-          title: const Text('Rota Listeni Oluştur'),
-          centerTitle: true,
-          backgroundColor: const Color(0xFF004D40),
-          foregroundColor: const Color(0xFFE8F5F2),
-        ),
+        title: const Text('Rota Listeni Oluştur'),
+        centerTitle: true,
+        backgroundColor: const Color(0xFF004D40),
+        foregroundColor: const Color(0xFFE8F5F2),
+      ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
         child: Column(
@@ -109,14 +106,16 @@ class _RouteViewState extends State<RouteView> {
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
-                    color: Color.fromRGBO(0, 77, 64, 1), // Normal durumdaki kenarlık rengi
+                    color: Color.fromRGBO(
+                        0, 77, 64, 1), // Normal durumdaki kenarlık rengi
                     width: 1.5,
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
-                    color: Color.fromRGBO(0, 58, 49, 1), // Odaklanınca kenarlık rengi (daha koyu yeşil)
+                    color: Color.fromRGBO(0, 58, 49,
+                        1), // Odaklanınca kenarlık rengi (daha koyu yeşil)
                     width: 2.0,
                   ),
                   borderRadius: BorderRadius.circular(8),
@@ -181,8 +180,8 @@ class _RouteViewState extends State<RouteView> {
                   if (state.routes.isEmpty) {
                     return const Center(
                       child: Text('Henüz rota eklenmedi',
-                          style: TextStyle(color: Color.fromRGBO(
-                          0, 77, 64, 1))),
+                          style:
+                              TextStyle(color: Color.fromRGBO(0, 77, 64, 1))),
                     );
                   }
                   return ListView.builder(
