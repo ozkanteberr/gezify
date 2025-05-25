@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -15,48 +14,52 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFE8F5F2),
       appBar: AppBar(
         title: const Text('Görünüm ve Dil'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
+        centerTitle: true,
+        backgroundColor: const Color(0xFF004D40),
+        foregroundColor: const Color(0xFFE8F5F2),
       ),
-      body: Center(
-        child: Container(
-          width: 400, // responsive için kısıtlı genişlik
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Tema Seçimi',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              _buildThemeOption(
-                icon: Icons.light_mode,
-                label: 'Açık',
-                value: ThemeMode.light,
-              ),
-              _buildThemeOption(
-                icon: Icons.dark_mode,
-                label: 'Koyu',
-                value: ThemeMode.dark,
-              ),
-              _buildThemeOption(
-                icon: Icons.settings_suggest,
-                label: 'Sistem Varsayılanı',
-                value: ThemeMode.system,
-              ),
-              const SizedBox(height: 30),
-              const Text(
-                'Uygulama Dili',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              DropdownButtonFormField<String>(
+      body: ListView(
+        padding: const EdgeInsets.all(24),
+        children: [
+          const Text(
+            'Tema Seçimi',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2F3E46),
+            ),
+          ),
+          const SizedBox(height: 16),
+          _buildThemeCard(Icons.light_mode, 'Açık', ThemeMode.light),
+          _buildThemeCard(Icons.dark_mode, 'Koyu', ThemeMode.dark),
+          _buildThemeCard(
+              Icons.settings_suggest, 'Sistem Varsayılanı', ThemeMode.system),
+          const SizedBox(height: 40),
+          const Text(
+            'Uygulama Dili',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2F3E46),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            elevation: 4,
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: DropdownButtonFormField<String>(
                 value: _selectedLanguage,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  prefixIcon: Icon(Icons.language, color: Color(0xFF004D40)),
+                ),
                 items: const [
                   DropdownMenuItem(value: 'tr', child: Text('Türkçe')),
                   DropdownMenuItem(value: 'en', child: Text('English')),
@@ -64,37 +67,61 @@ class _SettingsPageState extends State<SettingsPage> {
                 onChanged: (value) {
                   setState(() {
                     _selectedLanguage = value!;
-                    // locale değişimi burada yapılmalı
                   });
+
+                  if (value == 'en') {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        backgroundColor: Color(0xFFE8F5F2),
+                        title: const Text('Dil Desteği'),
+                        content: const Text(
+                          'Bu kısım için çalışmalarımız sürüyor.\nLütfen daha sonra tekrar deneyin.',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text(
+                              'Tamam',
+                              style: TextStyle(color: Color(0xFF00796B)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                 },
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.language),
-                  border: OutlineInputBorder(),
-                ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
-  Widget _buildThemeOption({required IconData icon, required String label, required ThemeMode value}) {
-    return RadioListTile<ThemeMode>(
-      value: value,
-      groupValue: _themeMode,
-      onChanged: (ThemeMode? newValue) {
-        setState(() {
-          _themeMode = newValue!;
-          // tema değişimi globalde uygulanmalı
-        });
-      },
-      title: Row(
-        children: [
-          Icon(icon, color: Theme.of(context).colorScheme.primary),
-          const SizedBox(width: 10),
-          Text(label),
-        ],
+  Widget _buildThemeCard(IconData icon, String label, ThemeMode mode) {
+    final isSelected = _themeMode == mode;
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      elevation: 4,
+      color: isSelected ? const Color(0xFFD0F0E0) : Colors.white,
+      child: RadioListTile<ThemeMode>(
+        value: mode,
+        groupValue: _themeMode,
+        onChanged: (ThemeMode? newValue) {
+          setState(() {
+            _themeMode = newValue!;
+            // Tema değişimi global olarak uygulanmalı
+          });
+        },
+        activeColor: const Color(0xFF004D40),
+        title: Row(
+          children: [
+            Icon(icon, color: const Color(0xFF2F3E46)),
+            const SizedBox(width: 10),
+            Text(label, style: const TextStyle(color: Color(0xFF2F3E46))),
+          ],
+        ),
       ),
     );
   }

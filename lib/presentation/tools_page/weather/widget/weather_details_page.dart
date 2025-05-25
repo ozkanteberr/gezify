@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+
 import 'package:gezify/presentation/tools_page/weather/widget/hourly_forecast_card.dart';
 import 'package:gezify/presentation/tools_page/weather/widget/weather.dart';
 import 'package:gezify/presentation/tools_page/weather/service/weather_service.dart';
@@ -111,6 +112,7 @@ class _HomePageState extends State<WeatherDetailsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+       
           _buildSearchBar(),
           const SizedBox(height: 30),
           _buildCurrentWeather(),

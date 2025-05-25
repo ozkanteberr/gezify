@@ -30,12 +30,12 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
       appBar: AppBar(
         title: const Text(
           "Şifremi Sıfırla",
-          style: TextStyle(color: Color(0xFF004D40)),
+          style: TextStyle(color: Color(0xFFE8F5F2),),
         ),
-        backgroundColor: const Color(0xFFB2DFDB),
+        backgroundColor: const Color(0xFF004D40),
         centerTitle: true,
         elevation: 1,
-        iconTheme: const IconThemeData(color: Color(0xFF004D40)),
+        iconTheme: const IconThemeData(color: Color(0xFFE8F5F2),),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -45,7 +45,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Sıfırlama maili gönderildi!'),
-                  backgroundColor: Colors.green,
+                  backgroundColor: Color(0xFF00796B),
                 ),
               );
               _emailController.clear();
