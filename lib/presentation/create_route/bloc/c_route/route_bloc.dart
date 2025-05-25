@@ -75,38 +75,23 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
       }
     });
 
-    on<LoadRouteOnMap>((event, emit) {
-      final polylineCoords = event.routeData.map((location) {
-        return LatLng(
-          location['latitude'] ?? 0.0,
-          location['longitude'] ?? 0.0,
-        );
-      }).toList();
-
-      emit(state.copyWith(polylineCoordinates: polylineCoords));
-    });
-
     on<LoadRouteWithCurrentLocation>((event, emit) async {
       List<LatLng> polylineCoords = [];
+      String? totalDistance;
+      String? totalDuration;
 
       try {
-        // 1. Kullanıcının konumunu al
         Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high,
         );
 
-        // 2. Tüm noktaları sırala: Kullanıcı konumu + veritabanından gelenler
         List<Map<String, dynamic>> fullPoints = [
-          {
-            'latitude': position.latitude,
-            'longitude': position.longitude,
-          },
+          {'latitude': position.latitude, 'longitude': position.longitude},
           ...event.routePoints,
         ];
 
-        final apiKey = 'AIzaSyAK2ou9pX-xl-oMaqlgDb8lMx7jW8sMVJI';
+        final apiKey = 'api_key';
 
-        // 3. Nokta çiftleri için rota çiz
         for (int i = 0; i < fullPoints.length - 1; i++) {
           final origin = fullPoints[i];
           final destination = fullPoints[i + 1];
@@ -117,17 +102,24 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
           final response = await http.get(Uri.parse(url));
           final data = jsonDecode(response.body);
 
-          if (data['routes'].isNotEmpty &&
-              data['routes'][0]['overview_polyline'] != null) {
+          if (data['routes'].isNotEmpty) {
             final points = data['routes'][0]['overview_polyline']['points'];
             final decodedPoints = PolylinePoints().decodePolyline(points);
-
             polylineCoords.addAll(
                 decodedPoints.map((p) => LatLng(p.latitude, p.longitude)));
+
+            if (i == 0) {
+              totalDistance = data['routes'][0]['legs'][0]['distance']['text'];
+              totalDuration = data['routes'][0]['legs'][0]['duration']['text'];
+            }
           }
         }
 
-        emit(state.copyWith(polylineCoordinates: polylineCoords));
+        emit(state.copyWith(
+          polylineCoordinates: polylineCoords,
+          totalDistance: totalDistance,
+          totalDuration: totalDuration,
+        ));
       } catch (e) {
         print("Hata oluştu: $e");
       }
