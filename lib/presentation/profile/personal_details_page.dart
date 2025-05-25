@@ -10,102 +10,67 @@ class PersonalDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFE8F5F2),
       appBar: AppBar(
         title: const Text('Profil Detayları'),
         centerTitle: true,
+        backgroundColor: const Color(0xFF004D40),
+        foregroundColor: const Color(0xFFE8F5F2),
       ),
       body: BlocBuilder<AuthCubit, AuthStates>(
         builder: (context, state) {
           if (state is Authanticated) {
             final user = state.user;
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CircleAvatar(
-                    radius: 45,
-                    backgroundImage:
-                        AssetImage("assets/images/user-avatar.png"),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    "Bilgilerim",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+            return ListView(
+              padding: const EdgeInsets.all(24),
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const CircleAvatar(
+                      radius: 45,
+                      backgroundImage: AssetImage("assets/images/avatar.png"),
+                      backgroundColor: Color(0xFF004D40),
                     ),
-                  ),
-                  const SizedBox(height: 60),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 6,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Text(
-                      'İsim: ${user.name}',
-                      style: const TextStyle(
-                        fontSize: 18,
+                    const SizedBox(height: 16),
+                    const Text(
+                      "Bilgilerim",
+                      style: TextStyle(
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
+                        color: Color(0xFF2F3E46),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 6,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Text(
-                      'Email: ${user.email}',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
+                    const SizedBox(height: 32),
+                    _buildInfoCard("İsim", user.name),
+                    const SizedBox(height: 16),
+                    _buildInfoCard("Email", user.email),
+                    const SizedBox(height: 40),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ForgotPasswordScreen(),
-                          ));
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      backgroundColor: Colors.blue,
-                      minimumSize: const Size(double.infinity, 45),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        backgroundColor: const Color(0xFF004D40),
+                        minimumSize: const Size(double.infinity, 50),
+                      ),
+                      child: const Text(
+                        'Şifremi Unuttum',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
                     ),
-                    child: const Text(
-                      'Şifremi Unuttum',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                ],
-              ),
+                  ],
+                ),
+              ],
             );
           } else if (state is AuthLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -113,6 +78,40 @@ class PersonalDetailsPage extends StatelessWidget {
             return const Center(child: Text('Kullanıcı bilgisi bulunamadı.'));
           }
         },
+      ),
+    );
+  }
+
+  Widget _buildInfoCard(String label, String value) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      elevation: 4,
+      margin: EdgeInsets.zero,
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        child: Row(
+          children: [
+            Text(
+              '$label: ',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF2F3E46),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Color(0xFF2F3E46),
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
