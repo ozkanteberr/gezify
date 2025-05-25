@@ -11,6 +11,7 @@ import 'package:gezify/presentation/create_route/presentation/route/route_direct
 import 'package:gezify/presentation/destination/pages/destination_detail_page.dart';
 import 'package:gezify/presentation/home/presentation/cubits/category/category_state.dart';
 import 'package:gezify/presentation/home/presentation/pages/view_all_page.dart';
+import 'package:gezify/presentation/home/presentation/pages/widgets/auto_scroll_slider.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/utils.dart';
 import 'package:gezify/presentation/home/presentation/cubits/category/category_bloc.dart';
 import 'package:gezify/presentation/home/presentation/cubits/destination/destination_cubit.dart';
@@ -20,6 +21,13 @@ import 'package:gezify/presentation/tools_page/tools_page.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/destination/destination_card.dart';
 import 'package:gezify/presentation/home/presentation/pages/widgets/category/category_selector.dart';
 import 'package:gezify/presentation/profile/profile_page.dart';
+
+// Renk sabitleri
+const Color backgroundColor = Color(0xFFE8F5F2);
+const Color primaryGreen = Color(0xFF00796B);
+const Color deepGreen = Color.fromRGBO(0, 77, 64, 1);
+const Color whiteText = Color.fromARGB(255, 255, 255, 255);
+const Color lightGreyText = Color.fromARGB(227, 221, 221, 221);
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -63,7 +71,6 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Üst kısım: Profil ve Bildirim
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -71,8 +78,9 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     const CircleAvatar(
                       radius: 25,
+                      backgroundColor: deepGreen,
                       backgroundImage:
-                          AssetImage("assets/images/user-avatar.png"),
+                          AssetImage("assets/images/avatar.png"),
                     ),
                     const SizedBox(width: 8),
                     BlocBuilder<AuthCubit, AuthStates>(
@@ -108,56 +116,20 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             const SizedBox(height: 20),
-
-            // Başlık yazısı
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Güzel dünyayı",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 28,
-                    color: Colors.black,
-                  ),
-                ),
-                RichText(
-                  text: const TextSpan(
-                    style: TextStyle(fontSize: 28),
-                    children: [
-                      TextSpan(
-                        text: "Gezify'la ",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      TextSpan(
-                        text: 'Keşfet!',
-                        style: TextStyle(
-                          color: Colors.orange,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            AutoScrollSlider(),
             const SizedBox(height: 24),
-
-            // Arama kutusu
             TextField(
-              style: const TextStyle(color: Colors.black87),
+              style: const TextStyle(color: whiteText),
               onChanged: (value) {
                 context.read<DestinationCubit>().filterDestinations(value);
               },
               decoration: InputDecoration(
                 hintText: 'Nereye Gitmek İstersin?',
-                prefixIcon: const Icon(CupertinoIcons.search),
+                hintStyle: const TextStyle(color: whiteText),
+                prefixIcon: const Icon(CupertinoIcons.search, color: whiteText),
                 contentPadding: const EdgeInsets.symmetric(vertical: 16),
                 filled: true,
-                fillColor: Colors.grey[200],
+                fillColor: deepGreen,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide.none,
@@ -165,7 +137,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 20),
-
             BlocBuilder<CategoryCubit, CategoryState>(
               builder: (context, state) {
                 if (state is CategoryLoading) {
@@ -192,12 +163,7 @@ class _HomePageState extends State<HomePage> {
                 }
               },
             ),
-
-            // Kategori seçici
-
             const SizedBox(height: 20),
-
-            // Best Destination başlık
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -222,14 +188,13 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             const SizedBox(height: 16),
-
             BlocBuilder<DestinationCubit, DestinationState>(
               builder: (context, state) {
                 if (state is DestinationLoading) {
                   return Center(child: CircularProgressIndicator());
                 } else if (state is DestinationLoaded) {
                   final destinations =
-                      state.filteredDestinations; // filtrelenmiş veriyi al
+                      state.filteredDestinations;
 
                   if (destinations.isEmpty) {
                     return Center(child: Text("Hiçbir sonuç bulunamadı."));
@@ -291,12 +256,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: backgroundColor,
       bottomNavigationBar: BlocBuilder<NavigationCubit, NavigationState>(
         builder: (context, state) {
           return BottomNavigationBar(
-            selectedItemColor: Colors.blue,
-            unselectedItemColor: Colors.grey,
+            backgroundColor: primaryGreen,
+            selectedItemColor: whiteText,
+            unselectedItemColor: lightGreyText,
             items: const [
               BottomNavigationBarItem(
                   icon: Icon(CupertinoIcons.home), label: 'Ana Sayfa'),

@@ -1,19 +1,16 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gezify/features/user/domain/usecases/get_current_user.dart';
+import 'package:gezify/presentation/home/domain/entities/destination.dart';
+import 'package:gezify/presentation/maps/pages/map_screen.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
 import 'package:gezify/presentation/comment/bloc/comment_bloc.dart';
 import 'package:gezify/presentation/comment/bloc/comment_event.dart';
 import 'package:gezify/presentation/comment/bloc/comment_state.dart';
-import 'package:gezify/presentation/create_route/bloc/c_route/route_bloc.dart';
-import 'package:gezify/presentation/create_route/bloc/c_route/route_event.dart';
-import 'package:gezify/presentation/home/domain/entities/destination.dart';
-import 'package:gezify/presentation/maps/pages/map_screen.dart';
 
 class DestinationDetailPage extends StatefulWidget {
   final Destination destination;
-  DestinationDetailPage({Key? key, required this.destination})
+
+  const DestinationDetailPage({Key? key, required this.destination})
       : super(key: key);
 
   @override
@@ -26,86 +23,135 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
   @override
   void initState() {
     super.initState();
-    final destinationId = widget.destination.id;
-    context.read<CommentBloc>().add(LoadComments(destinationId: destinationId));
+    context
+        .read<CommentBloc>()
+        .add(LoadComments(destinationId: widget.destination.id));
   }
 
   @override
   Widget build(BuildContext context) {
     final destination = widget.destination;
+
     return Scaffold(
-      backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        title: Text(destination.title),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-      ),
+      backgroundColor: const Color(0xFFE8F5F2),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Banner Görseli
-            Card(
-              margin: EdgeInsets.all(16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              clipBehavior: Clip.antiAlias,
-              elevation: 4,
-              child: Image.network(
-                destination.bannerImage,
-                height: 250,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+            // --- Banner ---
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(24),
+                    bottomRight: Radius.circular(24),
+                  ),
+                  child: Image.network(
+                    destination.bannerImage,
+                    height: 320,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Container(
+                  height: 320,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(24),
+                      bottomRight: Radius.circular(24),
+                    ),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.6)
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 40,
+                  left: 16,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back, color: Colors.black),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 20,
+                  left: 20,
+                  right: 20,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        destination.title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          shadows: [Shadow(color: Colors.black54, blurRadius: 4)],
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Row(
+                        children: [
+                          const Icon(Icons.location_on,
+                              color: Colors.white, size: 18),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              destination.adress,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 14),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(Icons.star,
+                              color: Colors.amber, size: 18),
+                          const SizedBox(width: 4),
+                          Text("${destination.rating}",
+                              style: const TextStyle(color: Colors.white)),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
             ),
-
-            // Detaylar
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    destination.title,
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 12),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.location_on, color: Colors.red[400]),
-                      SizedBox(width: 6),
+                      const Icon(Icons.info_outline, color: Colors.blueAccent),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          destination.adress,
-                          style:
-                              TextStyle(fontSize: 16, color: Colors.grey[700]),
+                           destination.description ?? "Açıklama bulunamadı.",
+                          style: TextStyle(fontSize: 16, color: Colors.grey[800]),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Icon(Icons.star, color: Colors.amber),
-                      SizedBox(width: 6),
-                      Text(
-                        '${destination.rating}',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                  // Haritada Göster & Rotama Ekle
+                  // --- Buttons ---
                   Row(
                     children: [
                       Expanded(
                         child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.redAccent,
-                            padding: EdgeInsets.symmetric(
+                            backgroundColor: const Color(0xFF00796B),
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -120,55 +166,53 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                               ),
                             );
                           },
-                          icon: Icon(Icons.map, color: Colors.white),
-                          label: Text(
-                            'Haritada Göster',
-                            style: TextStyle(color: Colors.white),
-                          ),
+                          icon: const Icon(Icons.map, color: Colors.white),
+                          label: const Text('Haritada Göster',
+                              style: TextStyle(color: Colors.white)),
                         ),
                       ),
-                      SizedBox(width: 12),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            padding: EdgeInsets.symmetric(
+                            backgroundColor:
+                                const Color.fromARGB(255, 88, 111, 165),
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           onPressed: () {
-                            context
-                                .read<RouteBloc>()
-                                .add(AddDestinationToRoute(destination));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content:
+                                      Text("${destination.title} rotanıza eklendi!")),
+                            );
                           },
-                          icon:
-                              Icon(Icons.add_location_alt, color: Colors.white),
-                          label: Text(
-                            'Rotama Ekle',
-                            style: TextStyle(color: Colors.white),
-                          ),
+                          icon: const Icon(Icons.add_location_alt,
+                              color: Colors.white),
+                          label: const Text('Rotama Ekle',
+                              style: TextStyle(color: Colors.white)),
                         ),
                       ),
                     ],
                   ),
+                  const SizedBox(height: 30),
 
-                  SizedBox(height: 30),
-
-                  // Galeri - Yatay kayan şekilde
-                  Text(
-                    "Fotoğraflar",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10),
+                  // --- Gallery ---
+                  const Text("Fotoğraflar",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 10),
                   SizedBox(
                     height: 160,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
-                      padding: EdgeInsets.only(right: 16),
+                      padding: const EdgeInsets.only(right: 16),
                       itemCount: destination.images.length,
-                      separatorBuilder: (context, index) => SizedBox(width: 12),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 12),
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: EdgeInsets.only(left: index == 0 ? 16 : 0),
@@ -177,22 +221,20 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                       },
                     ),
                   ),
+                  const SizedBox(height: 30),
 
-                  SizedBox(height: 30),
-
-                  // Yorumlar
-                  Text(
-                    "Yorumlar",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10),
+                  // --- Comments ---
+                  const Text("Yorumlar",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 10),
                   BlocBuilder<CommentBloc, CommentState>(
                     builder: (context, state) {
                       if (state is CommentLoading) {
-                        return Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       } else if (state is CommentLoaded) {
                         if (state.comments.isEmpty) {
-                          return Text("Henüz yorum yok.");
+                          return const Text("Henüz yorum yok.");
                         }
                         return Column(
                           children: state.comments
@@ -203,18 +245,15 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                       } else if (state is CommentError) {
                         return Text("Yorumlar yüklenemedi: ${state.message}");
                       }
-                      return SizedBox();
+                      return const SizedBox();
                     },
                   ),
-                  SizedBox(height: 20),
-                  Divider(),
-
-                  // Yorum Yap
-                  Text(
-                    "Yorum Yap",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 20),
+                  const Divider(),
+                  const Text("Yorum Yap",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 10),
                   TextField(
                     controller: _commentController,
                     maxLines: 3,
@@ -228,14 +267,14 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.redAccent,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        backgroundColor: const Color(0xFF00796B),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -244,27 +283,24 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                         final comment = _commentController.text.trim();
                         final currentUser =
                             context.read<AuthCubit>().currentUser;
-                        if (comment.isNotEmpty) {
-                          context.read<CommentBloc>().add(
-                                AddComment(
-                                  destinationId: widget.destination.id,
-                                  userName: currentUser!.name
-                                      .toString()
-                                      .toUpperCase(),
-                                  comment: comment,
-                                ),
-                              );
+
+                        if (comment.isNotEmpty && currentUser != null) {
+                          context.read<CommentBloc>().add(AddComment(
+                                destinationId: widget.destination.id,
+                                userName: currentUser.name.toUpperCase(),
+                                comment: comment,
+                              ));
                           _commentController.clear();
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Yorum gönderildi!")),
+                            const SnackBar(content: Text("Yorum gönderildi!")),
                           );
                         }
                       },
-                      icon: Icon(Icons.send),
-                      label: Text("Gönder"),
+                      icon: const Icon(Icons.send),
+                      label: const Text("Gönder"),
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                 ],
               ),
             ),
@@ -288,12 +324,12 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
 
   Widget _buildReview(String comment, String user) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8),
-      padding: EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 4,
@@ -305,13 +341,13 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(Icons.person, size: 32, color: Colors.grey[600]),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(user, style: TextStyle(fontWeight: FontWeight.bold)),
-                SizedBox(height: 4),
+                Text(user, style: const TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 4),
                 Text(comment),
               ],
             ),
