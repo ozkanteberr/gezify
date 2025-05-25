@@ -31,8 +31,11 @@ class DaySelector extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 6),
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: isSelected ? Colors.teal : Colors.grey[200],
+                color: isSelected
+                    ? Color.fromRGBO(0, 77, 64, 1)
+                    : Colors.grey[200],
                 borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.black), // <-- burası eklendi
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

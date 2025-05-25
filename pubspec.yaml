@@ -14,6 +14,8 @@ dependencies:
   # UI ve ikonlar
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.0.17
+  animated_splash_screen: ^1.3.0
+  lottie: ^3.3.1
 
   # Durum yönetimi
   flutter_bloc: ^9.1.0
@@ -53,6 +55,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    -  assets/Lottie/animation4.json
     - assets/fonts/
     - assets/images/
     - assets/icons/

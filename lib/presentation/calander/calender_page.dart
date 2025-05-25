@@ -6,6 +6,7 @@ import 'package:gezify/presentation/calander/bloc/event_state.dart';
 import 'package:gezify/presentation/calander/model/event_model.dart';
 import 'package:gezify/presentation/calander/widget/day_selctor.dart';
 import 'package:gezify/presentation/calander/widget/event_tile.dart';
+import 'package:gezify/presentation/home/presentation/pages/home_page.dart';
 import 'package:intl/intl.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -28,11 +29,16 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFE8F5F2),
       appBar: AppBar(
         title: const Text("Etkinlik Takvimi"),
+        centerTitle: true,
+        backgroundColor: const Color(0xFF004D40),
+        foregroundColor: const Color(0xFFE8F5F2),
         actions: [
           IconButton(
-            icon: const Icon(Icons.calendar_month),
+            icon: const Icon(Icons.calendar_month,
+                color: Color.fromRGBO(255, 255, 255, 1)),
             onPressed: () async {
               final picked = await showDatePicker(
                 context: context,
@@ -93,8 +99,13 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showCreateEventSheet(context),
-        label: const Text("Etkinlik Oluştur"),
-        icon: const Icon(Icons.add),
+        backgroundColor: Color.fromRGBO(0, 77, 64, 1),
+        label: const Text(
+          "Etkinlik Oluştur",
+          style:
+              TextStyle(color: Color(0xFFE8F5F2)), // Buraya istediğin rengi yaz
+        ),
+        icon: const Icon(Icons.add,color: Color(0xFFE8F5F2)),
       ),
     );
   }
