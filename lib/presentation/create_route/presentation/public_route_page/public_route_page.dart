@@ -7,6 +7,7 @@ import 'package:gezify/presentation/create_route/bloc/save_routes/save_routes_ev
 import 'package:gezify/presentation/create_route/bloc/save_routes/save_routes_state.dart';
 import 'package:gezify/presentation/create_route/data/route_model.dart';
 import 'package:gezify/presentation/create_route/presentation/public_route_page/public_route_detail_page.dart';
+import 'package:gezify/presentation/home/presentation/pages/home_page.dart';
 
 class PublicRouteListPage extends StatefulWidget {
   const PublicRouteListPage({super.key});
@@ -37,7 +38,14 @@ class _PublicRouteListPageState extends State<PublicRouteListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Herkese Açık Rotalar')),
+      backgroundColor: Color(0xFFE8F5F2),
+     appBar: AppBar(
+          title: const Text('Herkese Açık Rotalar'),
+          centerTitle: true,
+          backgroundColor: const Color(0xFF004D40),
+          foregroundColor: const Color(0xFFE8F5F2),
+        ),
+      
       body: MultiBlocListener(
         listeners: [
           BlocListener<SaveRouteBloc, SaveRouteState>(
@@ -77,6 +85,13 @@ class _PublicRouteListPageState extends State<PublicRouteListPage> {
                   return Card(
                     margin:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: const BorderSide(
+                        color: Color.fromRGBO(0, 77, 64, 1), // Siyah kenarlık
+                        width: 1.2,
+                      ),
+                    ),
                     child: ListTile(
                       title: Text(
                         routeList.title.toUpperCase(),
@@ -84,15 +99,17 @@ class _PublicRouteListPageState extends State<PublicRouteListPage> {
                       ),
                       subtitle: const Text('Herkese Açık Rota'),
                       leading: Icon(
-                        routeList.isPrivate ? Icons.lock : Icons.public,
-                        color: Colors.green,
+                        routeList.isPrivate ?   Icons.public: Icons.lock,
+                        color: const Color(0xFF00796B),
                       ),
                       trailing: IconButton(
                         icon: Icon(
                           isSaved
                               ? Icons.bookmark
                               : Icons.bookmark_border_outlined,
-                          color: isSaved ? Colors.blue : null,
+                          color: isSaved
+                              ? const Color.fromARGB(255, 0, 176, 155)
+                              : null,
                         ),
                         onPressed: () {
                           context

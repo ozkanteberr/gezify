@@ -15,9 +15,12 @@ class DestinationMiniListPage extends StatelessWidget {
       create: (_) => DestinationBloc(firestore: FirebaseFirestore.instance)
         ..add(LoadDestinations()),
       child: Scaffold(
+        backgroundColor: Color(0xFFE8F5F2),
         appBar: AppBar(
-          title: const Text("Popüler Rotalar"),
+          title: const Text('Popüler Rotalar'),
           centerTitle: true,
+          backgroundColor: const Color(0xFF004D40),
+          foregroundColor: const Color(0xFFE8F5F2),
         ),
         body: BlocBuilder<DestinationBloc, DestinationState>(
           builder: (context, state) {

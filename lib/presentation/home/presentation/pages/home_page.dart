@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   children: [
                     const CircleAvatar(
-                      radius: 25,
+                      radius: 18,
                       backgroundColor: deepGreen,
                       backgroundImage:
                           AssetImage("assets/images/avatar.png"),

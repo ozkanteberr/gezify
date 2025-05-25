@@ -5,6 +5,7 @@ import 'package:gezify/presentation/create_route/bloc/c_route/route_bloc.dart';
 import 'package:gezify/presentation/create_route/bloc/c_route/route_event.dart';
 import 'package:gezify/presentation/create_route/bloc/c_route/route_state.dart';
 import 'package:gezify/presentation/create_route/presentation/route/route_detail.dart';
+import 'package:gezify/presentation/home/presentation/pages/home_page.dart';
 
 class RoutePage extends StatelessWidget {
   const RoutePage({super.key});
@@ -55,11 +56,27 @@ class _RouteViewState extends State<RouteView> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Rota listesi kaydedildi.")),
+        const SnackBar(
+                      content: Text(
+                        'Rota Listesi Kaydedildi...',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Color(0xFF004D40),
+                      duration: Duration(seconds: 2),
+                    ),
+        
+        
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Lütfen başlık girin.")),
+        const SnackBar(
+                      content: Text(
+                        'Lütfen başlık girin...',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Color(0xFF004D40),
+                      duration: Duration(seconds: 2),
+                    ),
       );
     }
   }
@@ -67,11 +84,13 @@ class _RouteViewState extends State<RouteView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFE8F5F2),
       appBar: AppBar(
-        title: const Text('Rota Listeni Oluştur',
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        centerTitle: true,
-      ),
+          title: const Text('Rota Listeni Oluştur'),
+          centerTitle: true,
+          backgroundColor: const Color(0xFF004D40),
+          foregroundColor: const Color(0xFFE8F5F2),
+        ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
         child: Column(
@@ -82,9 +101,26 @@ class _RouteViewState extends State<RouteView> {
             const SizedBox(height: 10),
             TextField(
               controller: _routeTitleController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: "Rota listesi başlığı (ör. Karadeniz Turu)",
-                border: OutlineInputBorder(),
+                labelStyle: TextStyle(
+                  color: Color.fromRGBO(0, 77, 64, 1), // ← Label yazı rengi
+                  fontWeight: FontWeight.w500,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Color.fromRGBO(0, 77, 64, 1), // Normal durumdaki kenarlık rengi
+                    width: 1.5,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Color.fromRGBO(0, 58, 49, 1), // Odaklanınca kenarlık rengi (daha koyu yeşil)
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
             const SizedBox(height: 10),
@@ -103,6 +139,14 @@ class _RouteViewState extends State<RouteView> {
                           context.read<RouteBloc>().add(TogglePrivacy(!value));
                         });
                       },
+                      activeColor: Colors
+                          .white, // ON durumundaki thumb (daire) rengi - yeşil
+                      activeTrackColor: Color(
+                          0xFF00796B), // ON durumundaki track (arkaplan) rengi
+                      inactiveThumbColor: Color.fromRGBO(
+                          0, 77, 64, 1), // OFF durumundaki thumb rengi - gri
+                      inactiveTrackColor:
+                          Color(0xFFE0E0E0), // OFF durumundaki track rengi
                     ),
                   ],
                 ),
@@ -115,10 +159,14 @@ class _RouteViewState extends State<RouteView> {
                               const DestinationMiniListPage()),
                     );
                   },
-                  icon: const Icon(Icons.add),
-                  label: const Text('Rota ekle'),
+                  icon: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                  label: const Text('Rota ekle',
+                      style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Color(0xFF00796B),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -133,7 +181,8 @@ class _RouteViewState extends State<RouteView> {
                   if (state.routes.isEmpty) {
                     return const Center(
                       child: Text('Henüz rota eklenmedi',
-                          style: TextStyle(color: Colors.grey)),
+                          style: TextStyle(color: Color.fromRGBO(
+                          0, 77, 64, 1))),
                     );
                   }
                   return ListView.builder(
@@ -164,11 +213,12 @@ class _RouteViewState extends State<RouteView> {
             const SizedBox(height: 10),
             ElevatedButton.icon(
               onPressed: () => _saveRoutes(context),
-              icon: const Icon(Icons.save),
-              label: const Text('Rotaları Kaydet'),
+              icon: const Icon(Icons.save, color: Colors.white),
+              label: const Text('Rotaları Kaydet',
+                  style: TextStyle(color: Colors.white)),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(50),
-                backgroundColor: Colors.green,
+                backgroundColor: Color(0xFF00796B),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),

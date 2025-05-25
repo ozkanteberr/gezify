@@ -21,7 +21,13 @@ class SaveRouteListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Kaydedilen Rotalar')),
+      backgroundColor: Color(0xFFE8F5F2),
+       appBar: AppBar(
+          title: const Text('Kaydedilen Rotalar'),
+          centerTitle: true,
+          backgroundColor: const Color(0xFF004D40),
+          foregroundColor: const Color(0xFFE8F5F2),
+        ),
       body: BlocBuilder<SaveRouteBloc, SaveRouteState>(
         builder: (context, state) {
           if (state is SaveRouteLoading) {
@@ -40,6 +46,13 @@ class SaveRouteListPage extends StatelessWidget {
                 return Card(
                   margin:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: const BorderSide(
+                        color: Color.fromRGBO(0, 77, 64, 1), // Siyah kenarlık
+                        width: 1.2,
+                      ),
+                    ),
                   child: ListTile(
                     title: Text(
                       routeList.title.toUpperCase(),
@@ -47,8 +60,8 @@ class SaveRouteListPage extends StatelessWidget {
                     ),
                     subtitle: const Text('Kaydedilen Rota'),
                     leading: Icon(
-                      routeList.isPrivate ? Icons.lock : Icons.public,
-                      color: Colors.blue,
+                      routeList.isPrivate ? Icons.public: Icons.lock,
+                      color: const Color(0xFF00796B),
                     ),
                     onTap: () {
                       Navigator.push(

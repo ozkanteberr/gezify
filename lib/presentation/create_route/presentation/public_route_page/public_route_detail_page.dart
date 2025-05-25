@@ -10,49 +10,89 @@ class PublicRouteDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Rota Detayı')),
+      backgroundColor: const Color(0xFFE8F5F2),
+      appBar: AppBar(
+          title: const Text('Rota Detayı'),
+          centerTitle: true,
+          backgroundColor: const Color(0xFF004D40),
+          foregroundColor: const Color(0xFFE8F5F2),
+        ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              " ${routeList.title}".toUpperCase(),
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              "🔒 Gizlilik: Herkese Açık",
-              style: TextStyle(
-                color: Colors.green,
-                fontWeight: FontWeight.w500,
+              routeList.title.toUpperCase(),
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF004D40),
               ),
             ),
-            const SizedBox(height: 20),
-            const Text(
-              "🗺️⁀✈︎  Rotalar:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
             const SizedBox(height: 8),
+            Row(
+              children: const [
+                Icon(Icons.lock_open, size: 18, color: Color(0xFF00796B)),
+                SizedBox(width: 6),
+                Text(
+                  "Gizlilik: Herkese Açık",
+                  style: TextStyle(
+                    color: Color(0xFF00796B),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: const [
+                Icon(Icons.map, color: Color(0xFF004D40)),
+                SizedBox(width: 6),
+                Text(
+                  "Rotalar",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF004D40),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
             Expanded(
               child: routeList.routes.isEmpty
-                  ? const Text("Bu rotada henüz bir konum eklenmemiş.")
-                  : ListView.builder(
+                  ? const Center(
+                      child: Text(
+                        "Bu rotada henüz bir konum eklenmemiş.",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    )
+                  : ListView.separated(
                       itemCount: routeList.routes.length,
+                      separatorBuilder: (_, __) => const Divider(color: Colors.black12),
                       itemBuilder: (context, index) {
                         final item = routeList.routes[index];
 
                         if (item is String) {
                           return ListTile(
-                            leading: Text('╰┈➤'),
-                            title: Text(item),
+                            contentPadding: EdgeInsets.zero,
+                            leading: const Icon(Icons.location_on, color: Color(0xFF00796B)),
+                            title: Text(
+                              item,
+                              style: const TextStyle(fontSize: 16),
+                            ),
                           );
                         } else if (item is Map<String, dynamic>) {
                           return ListTile(
-                            leading: Text('╰┈➤'),
+                            contentPadding: EdgeInsets.zero,
+                            leading: const Icon(Icons.place, color: Color(0xFF00796B)),
                             title: Text(
                               item['title'] ?? 'Bilinmeyen Konum',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
                             ),
                           );
                         } else {
@@ -61,16 +101,35 @@ class PublicRouteDetailPage extends StatelessWidget {
                       },
                     ),
             ),
-            ElevatedButton(
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF00796B),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
                 onPressed: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            LineRoutePage(routeData: routeList.routes),
-                      ));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          LineRoutePage(routeData: routeList.routes),
+                    ),
+                  );
                 },
-                child: const Text("Haritada Görüntüle"))
+                icon: const Icon(Icons.map_outlined,color: Color(0xFFE8F5F2),),
+                label: const Text(
+                  "Haritada Görüntüle",
+                  style: TextStyle(fontSize: 16,
+                  color: Color(0xFFE8F5F2),
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
