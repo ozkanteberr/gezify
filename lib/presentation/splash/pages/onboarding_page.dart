@@ -103,7 +103,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         onTap: _nextPage,
                         child: Container(
                           decoration: const BoxDecoration(
-                            color: Colors.redAccent,
+                            color: Color.fromRGBO(0, 77, 64, 1),
                             shape: BoxShape.circle,
                           ),
                           padding: const EdgeInsets.all(20),
@@ -137,7 +137,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     height: 10,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: _currentPage == index ? Colors.redAccent : Colors.grey.shade300,
+                      color: _currentPage == index ? Color(0xFF00796B) : Colors.grey.shade300,
                     ),
                   ),
                 ),
@@ -150,7 +150,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
               right: 20,
               child: TextButton(
                 onPressed: _finishOnboarding,
-                child: const Text("Atla"),
+                child: const Text("Atla",
+                style: TextStyle(
+                fontSize: 16,
+                color: Color.fromRGBO(0, 77, 64, 1),
+              ),),
               ),
             ),
           ],

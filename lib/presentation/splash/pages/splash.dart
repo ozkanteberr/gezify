@@ -1,13 +1,8 @@
-// ignore_for_file: unused_import
-
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gezify/presentation/auth/presentation/pages/auth_gate.dart';
 import 'package:gezify/presentation/splash/pages/onboarding_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
-import 'package:gezify/presentation/auth/presentation/pages/auth_page.dart';
-import 'package:gezify/presentation/home/presentation/pages/home_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -17,36 +12,44 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  @override
-  void initState() {
-    super.initState();
-    _navigate();
-  }
+  late Widget _nextScreen;
 
-  Future<void> _navigate() async {
+  Future<void> _init() async {
     final prefs = await SharedPreferences.getInstance();
     final seenOnboarding = prefs.getBool('seenOnboarding') ?? false;
 
-    await Future.delayed(const Duration(seconds: 2));
-
     if (!seenOnboarding) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const OnboardingPage()),
-      );
+      _nextScreen = const OnboardingPage();
+      await prefs.setBool('seenOnboarding', true);
     } else {
-      // Giriş kontrolü burada yapılmaz, AuthCubit devreye girsin diye ana yapıya yönlendir
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const AuthGate()),
-      );
+      _nextScreen = const AuthGate();
     }
   }
 
   @override
+  void initState() {
+    super.initState();
+    _init().then((_) {
+      Future.delayed(const Duration(milliseconds: 3000), () {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => _nextScreen),
+        );
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: CircularProgressIndicator()), // Logo da koyabilirsin
+    return Scaffold(
+      backgroundColor: Color(0xFFE8F5F2), // Dilersen farklı bir sade renk de verebilirsin
+      body: Center(
+        child: Lottie.asset(
+          "assets/Lottie/animation4.json",
+          width: MediaQuery.of(context).size.width * 1,
+          fit: BoxFit.contain,
+          
+        ),
+      ),
     );
   }
 }
