@@ -14,7 +14,17 @@ class MyRoutesPage extends StatelessWidget {
     return BlocProvider(
       create: (_) => MyRoutesBloc()..add(FetchMyRoutes()),
       child: Scaffold(
-        appBar: AppBar(title: const Text("Oluşturduğum Rotalar")),
+        backgroundColor: const Color(0xFFE8F5F2),
+        appBar: AppBar(
+          title: const Text(
+            'Oluşturduğum Rotalar',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          centerTitle: true,
+          backgroundColor: const Color(0xFF004D40),
+          foregroundColor: const Color(0xFFE8F5F2),
+          elevation: 0,
+        ),
         body: BlocBuilder<MyRoutesBloc, MyRoutesState>(
           builder: (context, state) {
             if (state is MyRoutesLoading) {
@@ -25,44 +35,72 @@ class MyRoutesPage extends StatelessWidget {
               }
 
               return ListView.builder(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(16),
                 itemCount: state.routeLists.length,
                 itemBuilder: (context, index) {
                   final routeList = state.routeLists[index];
                   return Card(
-                    elevation: 3,
-                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    elevation: 4,
+                    margin: const EdgeInsets.symmetric(vertical: 10),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                     child: ListTile(
-                      contentPadding: const EdgeInsets.all(16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 14),
+                      tileColor: Colors.white,
                       title: Text(
                         routeList.title,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
+                          color: Color(0xFF004D40),
                         ),
                       ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 8),
-                          Text("📍 ${routeList.routes.length} rota"),
+                          Row(
+                            children: [
+                              const Icon(Icons.place_outlined,
+                                  size: 20, color: Colors.grey),
+                              const SizedBox(width: 6),
+                              Text("${routeList.routes.length} rota"),
+                            ],
+                          ),
                           const SizedBox(height: 4),
-                          Text(
-                            routeList.isPrivate ? "🔒 Özel" : "🌍 Herkese Açık",
-                            style: TextStyle(
-                              color: routeList.isPrivate
-                                  ? Colors.red
-                                  : Colors.green,
-                              fontWeight: FontWeight.w600,
-                            ),
+                          Row(
+                            children: [
+                              Icon(
+                                routeList.isPrivate
+                                    ? Icons.lock_outline
+                                    : Icons.public,
+                                size: 20,
+                                color: routeList.isPrivate
+                                    ? Colors.redAccent
+                                    : const Color(0xFF00796B),
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                routeList.isPrivate ? "Özel" : "Herkese Açık",
+                                style: TextStyle(
+                                  color: routeList.isPrivate
+                                      ? Colors.redAccent
+                                      : const Color(0xFF00796B),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                       trailing: IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
+                        icon: const Icon(Icons.delete_outline,
+                            color: Colors.redAccent),
                         onPressed: () {
                           _showDeleteConfirmationDialog(context, routeList.id);
                         },
@@ -101,19 +139,25 @@ class MyRoutesPage extends StatelessWidget {
             "Henüz rota oluşturulmamış.",
             style: TextStyle(fontSize: 18, color: Colors.grey),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RouteDirected(),
-                  ));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RouteDirected(),
+                ),
+              );
             },
             icon: const Icon(Icons.add),
             label: const Text("Yeni Rota Oluştur"),
             style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              backgroundColor: const Color(0xFF00796B),
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+              textStyle: const TextStyle(fontSize: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
           )
         ],
@@ -126,19 +170,29 @@ void _showDeleteConfirmationDialog(BuildContext context, String routeId) {
   showDialog(
     context: context,
     builder: (_) => AlertDialog(
+      backgroundColor: Color(0xFFE8F5F2),
       title: const Text("Rotayı Sil"),
       content: const Text("Bu rotayı silmek istediğinizden emin misiniz?"),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text("İptal"),
+          child: const Text(
+            "İptal",
+            style: TextStyle(color: Color.fromRGBO(0, 77, 64, 1)), // veya istediğin renk
+          ),
         ),
         ElevatedButton(
           onPressed: () {
             Navigator.pop(context);
             context.read<MyRoutesBloc>().add(DeleteRoute(routeId));
           },
-          child: const Text("Sil"),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color.fromRGBO(0, 77, 64, 1),
+          ),
+          child: const Text(
+            "Sil",
+            style: TextStyle(color: Colors.white), // veya istediğin renk
+          ),
         ),
       ],
     ),
