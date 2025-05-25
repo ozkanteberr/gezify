@@ -138,7 +138,8 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.info_outline, color: Colors.blueAccent),
+                      const Icon(Icons.info_outline,
+                          color: Color.fromRGBO(0, 77, 64, 1)),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -309,8 +310,11 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                           );
                         }
                       },
-                      icon: const Icon(Icons.send),
-                      label: const Text("Gönder"),
+                      icon: const Icon(Icons.send,color: Colors.white,),
+                      label: const Text(
+                        "Gönder",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 30),
