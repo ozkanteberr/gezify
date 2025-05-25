@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:gezify/firebase_options.dart';
+import 'package:gezify/presentation/calander/bloc/event_bloc.dart';
+import 'package:gezify/presentation/calander/data/event_repo.dart';
 import 'package:gezify/presentation/comment/bloc/comment_bloc.dart';
 import 'package:gezify/presentation/comment/data/comment_repo.dart';
 import 'package:gezify/presentation/create_route/bloc/public_routes/public_routes_bloc.dart';
@@ -77,6 +79,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => SaveRouteBloc(firestore: firestore, auth: auth)
             ..add(LoadSavedRoutes()),
+        ),
+        BlocProvider<EventBloc>(
+          create: (_) => EventBloc(EventRepository()),
         ),
       ],
       child: MaterialApp(
