@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gezify/common/widgets/app_bar.dart';
 import 'package:gezify/common/widgets/custom_text_field.dart';
 import 'package:gezify/common/widgets/sign_with_google.dart';
@@ -30,8 +31,14 @@ class _SignUpPageState extends State<SignUpPage> {
     if (name.isNotEmpty && email.isNotEmpty && password.isNotEmpty) {
       authCubit.register(email, password, name);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Email, şifre ve isim kısmı boş bırakılamaz!")));
+      Fluttertoast.showToast(
+        msg: "Email, şifre ve isim kısmı boş bırakılamaz!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
     }
   }
 
@@ -132,7 +139,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                 style: Theme.of(context)
                                     .textTheme
                                     .labelSmall!
-                                    .copyWith(color: const Color.fromARGB(255, 53, 53, 53)),
+                                    .copyWith(
+                                        color: const Color.fromARGB(
+                                            255, 53, 53, 53)),
                               ),
                             ),
                           ),
@@ -148,8 +157,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 side: BorderSide(
-                                       color: Colors.black.withOpacity(0.5),
-                                        width: 1.2),
+                                    color: Colors.black.withOpacity(0.5),
+                                    width: 1.2),
                               ),
                               child: Text(
                                 "Kayıt Ol",

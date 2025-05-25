@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gezify/common/widgets/custom_text_field.dart';
 import 'package:gezify/common/widgets/sign_with_google.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
@@ -7,8 +8,6 @@ import 'package:gezify/presentation/auth/presentation/cubits/auth_states.dart';
 import 'package:gezify/presentation/auth/presentation/pages/sign_up.dart';
 import 'package:gezify/presentation/forgot_password/presentation/forgot_pw_screen.dart';
 import 'package:gezify/presentation/home/presentation/pages/home_page.dart';
-
-// ... diğer importlar aynı
 
 class SignInPage extends StatefulWidget {
   SignInPage({super.key});
@@ -52,9 +51,15 @@ class _SignInPageState extends State<SignInPage> {
                   context,
                   MaterialPageRoute(builder: (context) => HomePage()),
                 );
-              } else if (state is AuthError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.message)),
+              } else if (state is Unauthenticated &&
+                  state.errorMessage != null) {
+                Fluttertoast.showToast(
+                  msg: state.errorMessage.toString(),
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  fontSize: 16.0,
                 );
               }
             },
@@ -152,9 +157,8 @@ class _SignInPageState extends State<SignInPage> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                     side: BorderSide(
-                                       color: Colors.black.withOpacity(0.5),
+                                        color: Colors.black.withOpacity(0.5),
                                         width: 1.2), // siyah kenarlık
-                                        
                                   ),
                                 ),
                                 child: state is AuthLoading
@@ -192,7 +196,8 @@ class _SignInPageState extends State<SignInPage> {
                         SizedBox(height: 10),
                         Text(
                           "veya bağlan",
-                          style: TextStyle(color: const Color.fromARGB(229, 86, 109, 83)),
+                          style: TextStyle(
+                              color: const Color.fromARGB(229, 86, 109, 83)),
                         ),
                         SizedBox(height: 20),
                         SignWithGoogle(),

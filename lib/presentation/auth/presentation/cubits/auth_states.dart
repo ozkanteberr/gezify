@@ -11,7 +11,10 @@ class Authanticated extends AuthStates {
   Authanticated(this.user);
 }
 
-class Unauthenticated extends AuthStates {}
+class Unauthenticated extends AuthStates {
+  final String? errorMessage;
+  Unauthenticated({this.errorMessage});
+}
 
 class AuthError extends AuthStates {
   final String message;

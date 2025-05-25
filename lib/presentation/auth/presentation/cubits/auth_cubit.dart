@@ -34,8 +34,7 @@ class AuthCubit extends Cubit<AuthStates> {
         emit(Unauthenticated());
       }
     } catch (e) {
-      AuthError(e.toString());
-      emit(Unauthenticated());
+      emit(Unauthenticated(errorMessage: e.toString()));
     }
   }
 
@@ -53,8 +52,7 @@ class AuthCubit extends Cubit<AuthStates> {
         emit(Unauthenticated());
       }
     } catch (e) {
-      AuthError(e.toString());
-      emit(Unauthenticated());
+      emit(Unauthenticated(errorMessage: e.toString()));
     }
   }
 
