@@ -45,17 +45,24 @@ dependencies:
   uuid: ^4.5.1
   flutter_polyline_points: ^2.1.0
   smooth_page_indicator: ^1.1.0
+  google_sign_in: ^6.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_logo.jpg"
 
 flutter:
   uses-material-design: true
 
   assets:
-    -  assets/Lottie/animation4.json
+    - assets/Lottie/animation4.json
     - assets/fonts/
     - assets/images/
     - assets/icons/

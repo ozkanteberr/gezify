@@ -13,7 +13,7 @@ class ProfileState {
     return ProfileState(
       username: "Kullanıcı", // varsayılan
       subtitle: "Gezify üyesi",
-      options: ["Profil", "İletişim", "Settings", "FAQ", "Çıkış Yap"],
+      options: ["Profil", "İletişim", "Ayarlar", "SSS", "Çıkış Yap"],
     );
   }
 

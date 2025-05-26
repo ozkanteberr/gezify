@@ -102,17 +102,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                IconButton(
-                  icon: const Icon(CupertinoIcons.bell),
-                  onPressed: () async {
-                    await context.read<AuthCubit>().logout();
-                    if (mounted) {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => SignInPage(),
-                      ));
-                    }
-                  },
-                ),
               ],
             ),
             const SizedBox(height: 20),

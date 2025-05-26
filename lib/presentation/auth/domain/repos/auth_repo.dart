@@ -6,4 +6,5 @@ abstract class AuthRepo {
       String email, String password, String name);
   Future<void> logout();
   Future<AppUser?> getCurrentUser();
+  Future<AppUser?> loginWithGoogle();
 }

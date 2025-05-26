@@ -10,7 +10,6 @@ import 'package:gezify/presentation/profile/contact_page.dart';
 import 'package:gezify/presentation/profile/personal_details_page.dart';
 import 'package:gezify/presentation/profile/settings.dart';
 
-
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
@@ -84,11 +83,11 @@ class ProfilePage extends StatelessWidget {
         icon = Icons.mail_outline;
         avatarColor = const Color(0xFFE8F5F2); // sarımsı
         break;
-      case "Settings":
+      case "Ayarlar":
         icon = Icons.settings;
         avatarColor = const Color(0xFFE8F5F2); // mor
         break;
-      case "FAQ":
+      case "SSS":
         icon = Icons.help_center;
         avatarColor = const Color(0xFFE8F5F2); // sarı-açık turuncu
         break;
@@ -146,15 +145,14 @@ class ProfilePage extends StatelessWidget {
                 builder: (context) => const ContactPage(),
               ),
             );
-          }
-          else if (title == "Settings") {
+          } else if (title == "Ayarlar") {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const SettingsPage(),
               ),
             );
-          } else if (title == "FAQ") {
+          } else if (title == "SSS") {
             Navigator.push(
               context,
               MaterialPageRoute(

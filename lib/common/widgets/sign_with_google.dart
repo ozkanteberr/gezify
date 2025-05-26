@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
 
 class SignWithGoogle extends StatelessWidget {
   const SignWithGoogle({
@@ -10,7 +12,9 @@ class SignWithGoogle extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          context.read<AuthCubit>().loginWithGoogle();
+        },
         child: Container(
           width: 450,
           height: 50,

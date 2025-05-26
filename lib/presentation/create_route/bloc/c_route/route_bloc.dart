@@ -90,7 +90,7 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
           ...event.routePoints,
         ];
 
-        final apiKey = 'api_key';
+        final apiKey = 'AIzaSyCzQ2JlCB0z20541yrwz_l7T6um9NhD4gw';
 
         for (int i = 0; i < fullPoints.length - 1; i++) {
           final origin = fullPoints[i];
