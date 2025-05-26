@@ -5,9 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gezify/presentation/tools_page/ai/ai_page.dart';
+import 'package:gezify/presentation/tools_page/bus/bus_list.dart';
 import 'package:gezify/presentation/tools_page/currency/bloc/currency_bloc.dart';
 import 'package:gezify/presentation/tools_page/currency/bloc/currency_event.dart';
 import 'package:gezify/presentation/tools_page/currency/bloc/currency_state.dart';
+import 'package:gezify/presentation/tools_page/flight/flight_list_screen.dart';
 import 'package:gezify/presentation/tools_page/weather/widget/weather_details_page.dart';
 
 class ToolsPage extends StatelessWidget {
@@ -36,10 +38,25 @@ class ToolsPage extends StatelessWidget {
           children: [
             if (hasBusTicket)
               _buildToolCard(context, "Otobüs Bileti", CupertinoIcons.bus,
-                  const Color(0xFF3D7B82)),
+                  const Color(0xFF3D7B82), () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BusListScreen(),
+                    ));
+              }),
             if (hasPlaneTicket)
-              _buildToolCard(context, "Uçak Bileti", CupertinoIcons.airplane,
-                  const Color(0xFF2E5C66)),
+              _buildToolCard(
+                context,
+                "Uçak Bileti",
+                CupertinoIcons.airplane,
+                const Color(0xFF2E5C66),
+                () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FlightListScreen(),
+                    )),
+              ),
             _buildAiCard(context),
             _buildWeatherCard(context),
             _buildRequestCard(context),
@@ -50,43 +67,31 @@ class ToolsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildToolCard(
-      BuildContext context, String title, IconData icon, Color iconColor) {
+  Widget _buildToolCard(BuildContext context, String title, IconData icon,
+      Color iconColor, VoidCallback onTap) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       elevation: 4,
       margin: const EdgeInsets.only(bottom: 16),
       color: const Color(0xFFFFFFFF),
       child: ListTile(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        leading: CircleAvatar(
-          backgroundColor: iconColor.withOpacity(0.1),
-          child: Icon(icon, color: iconColor),
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 16,
-            color: Color(0xFF2F3E46),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          leading: CircleAvatar(
+            backgroundColor: iconColor.withOpacity(0.1),
+            child: Icon(icon, color: iconColor),
           ),
-        ),
-        trailing: const Icon(Icons.arrow_forward_ios,
-            size: 16, color: Color(0xFF004D40)),
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                '$title seçildi',
-                style: TextStyle(color: Colors.white),
-              ),
-              backgroundColor: Color(0xFF004D40),
-              duration: Duration(seconds: 2),
+          title: Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+              color: Color(0xFF2F3E46),
             ),
-          );
-        },
-      ),
+          ),
+          trailing: const Icon(Icons.arrow_forward_ios,
+              size: 16, color: Color(0xFF004D40)),
+          onTap: onTap),
     );
   }
 

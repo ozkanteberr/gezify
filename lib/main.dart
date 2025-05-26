@@ -18,6 +18,10 @@ import 'package:gezify/presentation/home/presentation/cubits/category/category_b
 import 'package:gezify/presentation/maps/bloc/map_screen_cubit.dart';
 import 'package:gezify/presentation/splash/pages/onboarding_page.dart';
 import 'package:gezify/presentation/splash/pages/splash.dart';
+import 'package:gezify/presentation/tools_page/bus/bloc/bus_bloc.dart';
+import 'package:gezify/presentation/tools_page/bus/data/bus_repo.dart';
+import 'package:gezify/presentation/tools_page/flight/bloc/flight_bloc.dart';
+import 'package:gezify/presentation/tools_page/flight/data/flight_repository.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:gezify/presentation/auth/data/firebase_auth_repo.dart';
 import 'package:gezify/presentation/auth/presentation/cubits/auth_cubit.dart';
@@ -48,6 +52,8 @@ class MyApp extends StatelessWidget {
     final firestore = FirebaseFirestore.instance;
     final categoryRepo = CategoryRepository(firestore: firestore);
     final auth = FirebaseAuth.instance;
+    final FlightRepository fRepository = FlightRepository();
+    final BusRepository bRepository = BusRepository();
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthCubit(authRepo: authRepo)),
@@ -82,6 +88,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<EventBloc>(
           create: (_) => EventBloc(EventRepository()),
+        ),
+        BlocProvider(
+          create: (_) => FlightBloc(fRepository)..add(LoadFlights()),
+        ),
+        BlocProvider(
+          create: (_) => BusBloc(bRepository)..add(LoadBus()),
         ),
       ],
       child: MaterialApp(
