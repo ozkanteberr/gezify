@@ -26,6 +26,7 @@ class ToolsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+           centerTitle: true,
         title: const Text('Araçlar'),
         backgroundColor: const Color(0xFF004D40),
         foregroundColor: const Color(0xFFE8F5F2),
